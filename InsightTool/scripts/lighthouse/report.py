@@ -1,100 +1,106 @@
 # this python file uses the following encoding utf-8
 
 # Python Standard Library
-from collections import namedtuple
-from datetime import timedelta
 
-
-AuditResult = namedtuple('AuditResult', ['title', 'score', 'display'])
-AuditCategoryResult = namedtuple('AuditCategoryResult', ['passed', 'failed'])
-
-BASE_TIMINGS = [
-    'first-contentful-paint',
-    'speed-index',
-    'interactive',
-    'first-meaningful-paint',
-    'first-cpu-idle',
-    'estimated-input-latency',
-    'time-to-first-byte',
+PERFORMANCE_TIMINGS = [
+    ('first-contentful-paint', 15),
+    ('speed-index', 15),
+    ('largest-contentful-paint', 25),
+    ('interactive', 15),
+    ('total-blocking-time', 25),
+    ('cumulative-layout-shift', 5),
 ]
 """list(str) default list of timings"""
 
 
 class LighthouseReport(object):
-    """
-    Lighthouse report abstract
 
-    Should provide more pleasant report then the lighthouse JSON.
-    """
-
-    def __init__(self, data, timings=BASE_TIMINGS):
+    def __init__(self, data):
         """
         Args:
             data (dict): JSON loaded lighthouse report
-            timings (list(str), optional): list of timings
-                to gather
         """
+        self.__timings = PERFORMANCE_TIMINGS
+        # NOTE: Should we save the original report somewhere for safe keeping?
 
-        self.__data = data
-        self.__timings = timings
+        self.filtered_data = self.filter_data(data)
 
-    @property
-    def score(self):
-        """ Dictionary of lighthouse's category name: score (0 to 1) """
+    def filter_data(self, data):
+        # NOTE: May be good to have a unique ID to link prospect with competitors
 
-        return {
-            k: v.get('score', 0)
-            for k, v
-            in self.__data['categories'].items()
+        performance_score = 0
+
+        filtered_data = {
+            "fetch_time": data["fetchTime"],
+            "URL": data["finalUrl"],
+            "metrics": {}
         }
 
+        for timing, weight in self.__timings:
+            metric_score = data["audits"][timing]["score"]
+            performance_score += (metric_score * weight)
+
+            filtered_data["metrics"][timing] = {
+                "score": metric_score,
+                "timing": round(data["audits"][timing]["numericValue"], 0),
+                "perf_class": self.__get_score_class(metric_score * 100)
+            }
+
+        filtered_data["performance_score"] = round(performance_score, 0)
+        filtered_data["performance_class"] = self.__get_score_class(round(performance_score, 0))
+
+        return filtered_data
+
+    @staticmethod
+    def __get_score_class(score):
+        score_class = "red"
+
+        if score > 49:
+            score_class = "orange" if score < 90 else "green"
+
+        return score_class
+
     @property
-    def timings(self):
-        """ Dictionary of lighthouse's timings names: timedelta times """
-
-        return {
-            k: timedelta(milliseconds=v.get('rawValue'))
-            for k, v
-            in self.__data['audits'].items()
-            if k in self.__timings
-        }
+    def metric_keys(self):
+        return self.filtered_data["metrics"].keys()
 
     @property
-    def audits(self):
-        """
-        Dictionary of audits as category name: object with passed/failed keys
-            with lists attached.
-        """
-        res = {}
+    def metrics(self):
+        return self.filtered_data["metrics"]
 
-        for category, data in self.__data['categories'].items():
-            all_audit_refs = [
-                x.get('id')
-                for x in data['auditRefs']
-            ]
-            all_audits = {k: self.__data['audits'][k] for k in all_audit_refs}
-            sdm_to_reject = ['manual', 'notApplicable', 'informative']
-            passed_audits = [
-                AuditResult(**{
-                    'title': v['title'],
-                    'score': v['score'],
-                    'display': v.get('displayValue'),
-                })
-                for k, v in all_audits.items()
-                if (v.get('score', 0) or 0) == 1 and
-                v.get('scoreDisplayMode') not in sdm_to_reject
-            ]
+    @property
+    def url(self):
+        return self.filtered_data["URL"]
 
-            failed_audits = [
-                AuditResult(**{
-                    'title': v['title'],
-                    'score': v['score'],
-                    'display': v.get('displayValue'),
-                })
-                for k, v in all_audits.items()
-                if (v.get('score', 0) or 0) < 1 and
-                v.get('scoreDisplayMode') not in sdm_to_reject
-            ]
+    @property
+    def fetch_time(self):
+        return self.filtered_data["fetch_time"]
 
-            res[category] = AuditCategoryResult(passed_audits, failed_audits)
-        return res
+    @property
+    def overall_performance_class(self):
+        return self.filtered_data["performance_class"]
+
+    @property
+    def overall_performance_score(self):
+        return self.filtered_data["performance_score"]
+
+    def score(self, metric_name):
+        try:
+            return self.filtered_data["metrics"][metric_name]["score"]
+
+        except KeyError:
+            return "Given timing was not found"
+
+    def timing(self, metric_name):
+        try:
+            return self.filtered_data["metrics"][metric_name]["timing"]
+
+        except KeyError:
+            return "Given timing was not found"
+
+    def metric_performance_class(self, metric_name):
+        try:
+            return self.filtered_data["metrics"][metric_name]["perf_class"]
+
+        except KeyError:
+            return "Given timing was not found"
