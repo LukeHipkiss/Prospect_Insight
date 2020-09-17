@@ -28,7 +28,7 @@ class MyTestCase(unittest.TestCase):
             report = LighthouseReport(json.load(fil))
 
         self.assertDictEqual(
-            report.filtered_data,
+            report.data,
             EXPECTED_DATA,
         )
 
