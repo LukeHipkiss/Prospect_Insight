@@ -5,6 +5,7 @@ import json
 import os
 import subprocess
 import tempfile
+from ProspectInstights.config import root_dir
 
 # Own
 from .report import LighthouseReport
@@ -18,7 +19,7 @@ class LighthouseRunner(object):
         report (LighthouseReport): object with simplified report
     """
 
-    def __init__(self, url, form_factor='mobile', quiet=True,
+    def __init__(self, url, form_factor='desktop', quiet=True,
                  additional_settings=None, debug=False):
         """
         Args:
@@ -37,8 +38,9 @@ class LighthouseRunner(object):
         if not self.__debug:
             _, self.__report_path = tempfile.mkstemp(suffix='.json')
             self._run(url, form_factor, quiet, additional_settings)
+
         else:
-            self.__report_path = "/home/lh-scivisum/Projects/ProspectInstights/InsightTool/tests/test_response.json"
+            self.__report_path = str(root_dir()) + "/InsightTool/tests/test_response.json"
 
         self.report = self._get_report()
         self._clean()
