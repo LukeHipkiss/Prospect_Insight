@@ -15,7 +15,7 @@ PERFORMANCE_TIMINGS = [
 
 class LighthouseReport(object):
 
-    def __init__(self, data):
+    def __init__(self, data, from_load=False):
         """
         Args:
             data (dict): JSON loaded lighthouse report
@@ -23,7 +23,7 @@ class LighthouseReport(object):
         self.__timings = PERFORMANCE_TIMINGS
         # NOTE: Should we save the original report somewhere for safe keeping?
 
-        self.filtered_data = self.filter_data(data)
+        self.data = self.filter_data(data) if not from_load else data
 
     def filter_data(self, data):
         # NOTE: May be good to have a unique ID to link prospect with competitors
@@ -62,45 +62,45 @@ class LighthouseReport(object):
 
     @property
     def metric_keys(self):
-        return self.filtered_data["metrics"].keys()
+        return self.data["metrics"].keys()
 
     @property
     def metrics(self):
-        return self.filtered_data["metrics"]
+        return self.data["metrics"]
 
     @property
     def url(self):
-        return self.filtered_data["URL"]
+        return self.data["URL"]
 
     @property
     def fetch_time(self):
-        return self.filtered_data["fetch_time"]
+        return self.data["fetch_time"]
 
     @property
     def overall_performance_class(self):
-        return self.filtered_data["performance_class"]
+        return self.data["performance_class"]
 
     @property
     def overall_performance_score(self):
-        return self.filtered_data["performance_score"]
+        return self.data["performance_score"]
 
     def score(self, metric_name):
         try:
-            return self.filtered_data["metrics"][metric_name]["score"]
+            return self.data["metrics"][metric_name]["score"]
 
         except KeyError:
             return "Given timing was not found"
 
     def timing(self, metric_name):
         try:
-            return self.filtered_data["metrics"][metric_name]["timing"]
+            return self.data["metrics"][metric_name]["timing"]
 
         except KeyError:
             return "Given timing was not found"
 
     def metric_performance_class(self, metric_name):
         try:
-            return self.filtered_data["metrics"][metric_name]["perf_class"]
+            return self.data["metrics"][metric_name]["perf_class"]
 
         except KeyError:
             return "Given timing was not found"
