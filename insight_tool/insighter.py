@@ -12,7 +12,7 @@ URL_LIST = [PROPOSAL_URL, COMPETITOR_URL_1, COMPETITOR_URL_2]
 
 PATH_TO_TEST_FOLDER = "tests/"
 
-DEBUG = False
+DEBUG = True
 
 
 def report_exists(file_path):
