@@ -2,7 +2,10 @@ import unittest
 import json
 from insight_tool.report import LighthouseReport
 
-TEST_JSON_FILE = "insight_tool/tests/test_response.json"
+# We should use pytest, it's very popular and practical, look into it.
+
+
+TEST_JSON_FILE = "insight_tool/tests/test_response.json"  # This reference here needs to go to a centralised settings.py
 EXPECTED_DATA = {
     'fetch_time': '2020-09-16T13:03:29.810Z',
     'URL': 'https://shop.polymer-project.org/',
@@ -21,6 +24,8 @@ EXPECTED_DATA = {
 
 class MyTestCase(unittest.TestCase):
 
+    # All of these are more integration tests than unit tests, with a unit test you need to test the unit i.e a function or method.
+    # I think we should clear the test and discuss on how to start again.
     def test_lighthouse_report(self):
 
         with open(TEST_JSON_FILE, 'r') as fil:
