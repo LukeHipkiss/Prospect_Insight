@@ -1,6 +1,15 @@
 # Prospect Insight
 
-Prospect Insight is a Django application for running lighthouse audits against three target URLs, and then providing a comparison of strictly just the performance scores and the Lab Results data.
+## Description
+Prospect Insight is a Django application for running lighthouse audits against three target URLs, and then providing a comparison of strictly just the overall performance score and the Lab Results data.
+
+## End Goal
+Project will have the following features:
+- Web interface for running a performance audit comparions on a given prospect and two competitors URLs.
+- Web interface for displaying the performance comparison.
+- Web interface for viewing previously run performance audit comparisons, grouped by prospect.
+- Web interface for viewing previously run perfromance audit comparisons for selected prospect.
+- Capable of repeating the last performance audit comparison for a selected prospect.
 
 ## Installation
 
