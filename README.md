@@ -77,7 +77,7 @@ The metrics stored alongside their individual score weighting used to find the o
 - **Largest Contentful Paint** - 25%
 - **Time to Interactive** - 15%
 - **Total Blocking Time** - 25%
-- **Cumulative Blocking Time** - 5%
+- **Cumulative Layout Shift** - 5%
 
 ## Dependencies
 - Python 3.7
