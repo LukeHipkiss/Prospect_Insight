@@ -5,6 +5,7 @@ def tribe_score(score: int) -> str:
     medium = 50 to 90
     high = 90 to 100
     """
+    assert 0 <= score <= 100
 
     if score > 90:
         return "high"

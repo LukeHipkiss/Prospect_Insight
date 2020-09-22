@@ -1,5 +1,5 @@
-from . import settings
-from .utils import tribe_score
+from insight_tool import settings
+from insight_tool.utils import tribe_score
 
 
 class LighthouseReport(dict):
@@ -59,3 +59,14 @@ class LighthouseReport(dict):
         """Convenience method for retrieving the performance class for a particular metric."""
         assert metric_name in self.PERFORMANCE_WEIGHTS.keys()
         return self.data["metrics"][metric_name]["perf_class"]
+
+
+if __name__ == "__main__":
+
+    # Temp tests
+    with open("test.json") as f:
+        import json
+
+        report = LighthouseReport(json.load(f))
+
+    assert report.performance_score != 0
