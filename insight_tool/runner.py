@@ -14,8 +14,14 @@ class LighthouseRunner(object):
         report (LighthouseReport): object with simplified report
     """
 
-    def __init__(self, url, form_factor='desktop', quiet=True,
-                 additional_settings=None, debug=False):
+    def __init__(
+        self,
+        url,
+        form_factor="desktop",
+        quiet=True,
+        additional_settings=None,
+        debug=False,
+    ):
         """
         Args:
             url (str): url to test
@@ -29,14 +35,13 @@ class LighthouseRunner(object):
         # I wouldn't make it dunder here, as it's harder to test.
         self.__debug = debug
 
-        assert form_factor in ['mobile', 'desktop']
-
+        assert form_factor in ["mobile", "desktop"]
 
         # Avoid logic in the init, it's harder to debug and can make things confusing
         # Maybe it could make sense to have a __call__ method but as a first stance, move this action to a method that
         # you will explicitly call.
         if not self.__debug:
-            _, self.__report_path = tempfile.mkstemp(suffix='.json')
+            _, self.__report_path = tempfile.mkstemp(suffix=".json")
             self._run(url, form_factor, quiet, additional_settings)
 
         else:
@@ -64,26 +69,28 @@ class LighthouseRunner(object):
             # this is too important to be hidden here like that, for the main command you could define a class variable.
             # maybe the flags needed could be init args if they are prone to change, or at least parameters.
             command = [
-                'lighthouse',
+                "lighthouse",
                 url,
-                '--quiet' if quiet else '',
+                "--quiet" if quiet else "",
                 '--chrome-flags="--headless"',
-                '--preset=perf',
-                '--emulated-form-factor={0}'.format(form_factor),
-                '--output=json',
-                '--output-path={0}'.format(report_path),
+                "--preset=perf",
+                "--emulated-form-factor={0}".format(form_factor),
+                "--output=json",
+                "--output-path={0}".format(report_path),
             ]
 
             command = command + additional_settings
-            subprocess.check_call(' '.join(command), shell=True)
+            subprocess.check_call(" ".join(command), shell=True)
         except subprocess.CalledProcessError as exc:
             # What's the benefit of this? I'd personally just not catch it
             # What are the conditions that this fails?
-            msg = '''
+            msg = """
                 Command "{0}"
                 returned an error code: {1},
                 output: {2}
-            '''.format(exc.cmd, exc.returncode, exc.output)
+            """.format(
+                exc.cmd, exc.returncode, exc.output
+            )
             raise RuntimeError(msg)
 
     # Not sure if it's applicable as I haven't used lighthouse yet, but if the result of calling the command is the json output
@@ -91,7 +98,7 @@ class LighthouseRunner(object):
     # if you wish, opening a file is less desirable particularly if you want to clean it after...
     # Generally keeping things in memory and being mindful about IO is a good idea... (Not really a concern here too much)
     def _get_report(self):
-        with open(self.__report_path, 'r') as fil:
+        with open(self.__report_path, "r") as fil:
             return LighthouseReport(json.load(fil))
 
     def _clean(self):

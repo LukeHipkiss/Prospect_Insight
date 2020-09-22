@@ -28,35 +28,40 @@ def report_exists(file_path):
 # rather than having the second redundant parameter.  This overwrite is likely to cause bugs, I'd simplify things there...
 # You should take the target path as input.
 def save_report(report: json, name: str, overwrite=False):
-    target_path = PATH_TO_TEST_FOLDER + name.replace('/', '_') + '.json'
+    target_path = PATH_TO_TEST_FOLDER + name.replace("/", "_") + ".json"
 
     if not overwrite and report_exists(target_path):
         return
 
-    with open(target_path, 'w') as report_to_save:
+    with open(target_path, "w") as report_to_save:
         json.dump(report, report_to_save)
 
 
 # This is starting to look like a class, perhaps a class Report? with the save and load abstracted away among everything else.
 def load_report(name: str):
-    with open(PATH_TO_TEST_FOLDER + name.replace('/', '_') + '.json', 'r') as report_to_load:
+    with open(
+        PATH_TO_TEST_FOLDER + name.replace("/", "_") + ".json", "r"
+    ) as report_to_load:
         return json.load(report_to_load)
+
 
 # We should take things as input, even if we have some defaults, "click" for the rescue!
 def main():
 
     if DEBUG:
 
-
         reports_to_run = [
             url
             for url in URL_LIST
-            if not report_exists(PATH_TO_TEST_FOLDER + url.replace('/', '_') + '.json')
+            if not report_exists(PATH_TO_TEST_FOLDER + url.replace("/", "_") + ".json")
         ]
         reports_to_load = list(set(URL_LIST).difference(set(reports_to_run)))
 
         reports_to_run = [LighthouseRunner(url).report for url in reports_to_run]
-        reports_to_load = [LighthouseReport(load_report(url), from_load=True) for url in reports_to_load]
+        reports_to_load = [
+            LighthouseReport(load_report(url), from_load=True)
+            for url in reports_to_load
+        ]
 
         reports = reports_to_run + reports_to_load
 
@@ -78,5 +83,5 @@ def main():
         print(report.url, report.overall_performance_score)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
