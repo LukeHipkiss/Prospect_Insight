@@ -45,7 +45,7 @@ class LighthouseRunner(object):
             # going on, not that you will run a test.
             # My advice here is make the interface flexible enough so that it's easy for you to test, but keep things
             # separate, moving the logic out of the init is a start.
-            self.__report_path = "tests/test_response.json"
+            self.__report_path = "sample_response.json"
 
         self.report = self._get_report()
         self._clean()

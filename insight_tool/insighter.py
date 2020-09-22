@@ -1,5 +1,5 @@
 import json
-from os import path  # Best only importing os for readability (It helps to know where it's coming from)
+import os
 
 from runner import LighthouseRunner
 from report import LighthouseReport
@@ -20,7 +20,7 @@ DEBUG = True
 
 # Too simple to abstract
 def report_exists(file_path):
-    return path.exists(file_path)
+    return os.path.exists(file_path)
 
 
 # That should be a more general function, if you want a more specialised behaviour then change the name and add a docstring

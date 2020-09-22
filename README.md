@@ -5,10 +5,10 @@ Prospect Insight is a Django application for running lighthouse audits against t
 
 ## End Goal
 Project will have the following features:
-- Web interface for running a performance audit comparions on a given prospect and two competitors URLs.
+- Web interface for running a performance audit comparisons on a given prospect and two competitors URLs.
 - Web interface for displaying the performance comparison.
 - Web interface for viewing previously run performance audit comparisons, grouped by prospect.
-- Web interface for viewing previously run perfromance audit comparisons for selected prospect.
+- Web interface for viewing previously run performance audit comparisons for selected prospect.
 - Capable of repeating the last performance audit comparison for a selected prospect.
 
 ## Installation
@@ -29,12 +29,13 @@ TBC
 The `prospect_insighter.py` script allows the easier method of interaction for backend interaction.
 
 ```python
+from insight_tool.runner import LighthouseRunner
+
 report = LighthouseRunner("https://www.google.com").report
 
-print(report.overall_performance_score)
+print(report.performance_score)
 print(report.data)
 print(report.url)
-print(report.metric_keys)
 print(report.timing("first-contentful-paint"))
 ```
 
@@ -44,15 +45,15 @@ print(report.timing("first-contentful-paint"))
 
 ```python
 EXPECTED_DATA = {
-    'URL': 'https://shop.polymer-project.org/',
-    'fetch_time': '2020-09-16T13:03:29.810Z',
+    'finalUrl': 'https://shop.polymer-project.org/',
+    'fetchTime': '2020-09-16T13:03:29.810Z',
     'performance_score': 38.0,
-    'performance_class': 'red',
+    'performance_class': 'low',
     'metrics': {
         'first-contentful-paint': {
             'score': 0.65,
             'timing': 1357.0, 
-            'perf_class': 'orange'
+            'perf_class': 'medium'
         },
         'speed-index': {...},
         'largest-contentful-paint': {...},
@@ -65,7 +66,7 @@ EXPECTED_DATA = {
 
 - `report.url` - Returns the final url of the lighthouse audit. This is not necessarily the originally provided URL, as any redirects during the lighthouse auditing result in the final URL changing.
 - `report.metrics` - Returns the sub metric dictionary.
-- `report.overall_performance_score` - Returns the overall audit performance score, derived from the individual weighting and timing of each metric.
+- `report.performance_score` - Returns the overall audit performance score, derived from the individual weighting and timing of each metric.
 - `report.score(METRIC_NAME)` - Returns the performance score of an individual metric.
 - `report.timing(METRIC_NAME)` - Returns the metric timing recorded in milliseconds.
 
