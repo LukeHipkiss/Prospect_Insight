@@ -1,0 +1,49 @@
+html {
+    height: 100%;
+}
+
+body {
+    min-width: 600px !important;
+    background: linear-gradient(180deg, white 30%, #4193e3 80%, #4193e3 100%);
+}
+
+table td, table th {
+    text-align: center;
+}
+
+table td a {
+    color: #4193e3 !important;
+}
+
+hr {
+    background-color: white !important;
+}
+
+.text-tribe {
+    color: #4193e3 !important;
+}
+
+.btn-tribe {
+    background-color: #4193e3 !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.max-width {
+    width: 100% !important;
+}
+
+#tribe-logo {
+    box-shadow: 0 0 2px white;
+}
+
+#report-table-header th,
+#prospect-table-header th {
+    background-color: #4193e3 !important;
+    border-radius: 0 !important;
+    color: white !important;
+}
+
+#report-table-body tr td:first-child {
+    font-weight: bold;
+}

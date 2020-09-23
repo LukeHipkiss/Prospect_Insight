@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Prospect Insighter</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/mainStyles.css">
+    <script src="js/mainFunctions.js"></script>
+</head>
+<body>
+
+    <div class="row container justify-content-center m-auto">
+        <a href="index.html">
+            <img src="https://scivisum-email-static-content.s3-eu-west-1.amazonaws.com/Tribe+Logo.png" alt="ThinkTribe Logo" id="tribe-logo" class="img-responsive my-3" width="120" height="auto">
+        </a>
+    </div>
+
+    <div class="row container justify-content-center m-auto mt-4">
+        <h1 class="text-tribe">Prospect Insighter</h1>
+    </div>
+
+    <section class="container text-center mt-3">
+
+        <nav class="navbar navbar-expand-sm bg-white navbar-light justify-content-center rounded mt-2">
+
+            <form class="form-inline" action="report.html">
+
+                <div class="row">
+
+                    <div class="form-group">
+                        <select class="form-control">
+                            <option disabled selected>Choose Prospect</option>
+                            <option>Allsaints</option>
+                            <option>Dreams</option>
+                            <option>Fitflop</option>
+                            <option>GHD</option>
+                            <option>Liverpool</option>
+                            <option>Made</option>
+                            <option>WoS</option>
+                        </select>
+                        <button type="button" class="btn btn-tribe ml-1" data-toggle="modal" data-target="#add-new-prospect">+</button>
+                        <!-- The Modal -->
+                        <div class="modal fade mt-5 border-0" id="add-new-prospect">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header">
+                                        <h4 class="modal-title text-tribe">Add New Prospect</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <div class="modal-body ">
+                                        <form class="form-inline" action="/action_page.php">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="new-prospect-input" placeholder="Prospect">
+                                                <button class="btn btn-tribe ml-2" data-dismiss="modal">Add</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col prospect-url">
+                      <input id="prospect-url" class="form-control mr-sm-2" type="text" placeholder="Prospect URL">
+                    </div>
+
+                    <div class="col compone-url">
+                      <input id="compone-url" class="form-control mr-sm-2" type="text" placeholder="Competitor URL">
+                    </div>
+
+                    <div class="col comptwo-url">
+                      <input id="comptwo-url" class="form-control mr-sm-2" type="text" placeholder="Competitor URL">
+                    </div>
+
+                    <div class="col">
+                        <button class="btn btn-tribe max-width" type="submit">Analyse</button>
+                    </div>
+
+                </div>
+            </form>
+
+        </nav>
+
+    </section>
+
+    <section id="prospect-listing-table" class="justify-content-center">
+
+        <div class="row">
+            <hr class="mt-5 col-6">
+        </div>
+
+        <div class="row container justify-content-center m-auto">
+            <h3 class="text-tribe">Prospect Reports</h3>
+        </div>
+
+        <div class="container mt-3">
+
+            <input class="form-control my-2" id="prospect-table-search" type="text" placeholder="Quick filter..">
+
+            <table class="table table-hover table-light border rounded">
+                <thead id="prospect-table-header" class="table-light border">
+                  <tr>
+                    <th>Prospect</th>
+                    <th>Reports</th>
+                    <th>Last Report</th>
+                  </tr>
+                </thead>
+                <tbody id="prospect-table-body" class="rounded">
+                  <tr>
+                    <td><a href="report.html">Fitflop</a></td>
+                    <td>3</td>
+                    <td>20/08/2020</td>
+                  </tr>
+                  <tr>
+                    <td><a href="report.html">Allsaints</a></td>
+                    <td>1</td>
+                    <td>10/09/2020</td>
+                  </tr>
+                  <tr>
+                    <td><a href="report.html">Liverpool</a></td>
+                    <td>6</td>
+                    <td>21/09/2020</td>
+                  </tr>
+                  <tr>
+                    <td><a href="report.html">WoS</a></td>
+                    <td>3</td>
+                    <td>20/08/2020</td>
+                  </tr>
+                  <tr>
+                    <td><a href="report.html">Made</a></td>
+                    <td>1</td>
+                    <td>10/09/2020</td>
+                  </tr>
+                  <tr>
+                    <td><a href="report.html">GHD</a></td>
+                    <td>6</td>
+                    <td>21/09/2020</td>
+                  </tr>
+                  <tr>
+                    <td><a href="report.html">Dreams</a></td>
+                    <td>3</td>
+                    <td>20/08/2020</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+</body>
+</html>
