@@ -46,3 +46,4 @@ ENTRYPOINT ["python"]
 
 CMD ["/lighthouse/lighthouse/server.py"]
 
+ENV PYTHONUNBUFFERED=1
