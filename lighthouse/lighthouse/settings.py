@@ -9,4 +9,4 @@ PERFORMANCE_WEIGHTS = {
     "cumulative-layout-shift": 5,
 }
 
-REPORT_PATH = os.getenv("REPORT_PATH", "/tmp/")
+REPORT_PATH = os.getenv("REPORT_PATH", "/home/chrome/reports/")

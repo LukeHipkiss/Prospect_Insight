@@ -1,5 +1,11 @@
 version: '3'
 services:
 
-  insight:
-    build: .
+  lighthouse:
+    build: ./lighthouse
+    volumes:
+    - "./lighthouse/lighthouse:/lighthouse"
+    command:
+      - "/lighthouse/server.py"
+    ports:
+    - "4000:4000"

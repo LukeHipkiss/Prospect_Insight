@@ -1,6 +1,8 @@
+import os
+import sys
 import subprocess
 
-from insight_tool import settings
+import click
 
 
 class LighthouseRunner:
@@ -11,13 +13,13 @@ class LighthouseRunner:
     MAIN = "lighthouse"
 
     def __init__(
-        self,
-        url,
-        file_name,
-        emulated_form_factor="desktop",
-        chrome_flags="--headless",
-        preset="perf",
-        output="json",
+            self,
+            url,
+            file_path,
+            emulated_form_factor="desktop",
+            chrome_flags="--headless --disable-gpu --no-sandbox",
+            preset="perf",
+            output="json",
     ):
         """ Parameters matches the cli, saving as a json is implied.
         """
@@ -30,12 +32,13 @@ class LighthouseRunner:
             f"--preset={preset}",
             f"--emulated-form-factor={emulated_form_factor}",
             f"--output={output}",
-            f"--output-path={settings.REPORT_PATH + file_name}",
+            f"--output-path={os.path.join(file_path)}",
         ]
 
     def run(self):
         """Executes lighthouse within a subshell and returns the exit code"""
-        process = subprocess.run(self.command)
+        process = subprocess.run(self.command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print(f"Process completed with exit status:{process.returncode}")
         return process.returncode
 
     def __call__(self):
@@ -43,6 +46,13 @@ class LighthouseRunner:
         return self.run()
 
 
-if __name__ == "__main__":
-    # Just a simple test prior to proper unit testing it.
-    LighthouseRunner("https://www.google.com", "test.json")()
+@click.command()
+@click.argument('url')
+@click.argument('path')
+def main(url, path):
+    """ Entrypoint for the lighthouse runner, it requires two arguments in order:
+        * An url to be tested.
+        * A file path where the report will be saved.
+    """
+    return_code = LighthouseRunner(url, path)()
+    sys.exit(return_code)

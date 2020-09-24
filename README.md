@@ -29,7 +29,7 @@ TBC
 The `prospect_insighter.py` script allows the easier method of interaction for backend interaction.
 
 ```python
-from insight_tool.runner import LighthouseRunner
+from lighthouse.lighthouse.runner import LighthouseRunner
 
 report = LighthouseRunner("https://www.google.com").report
 

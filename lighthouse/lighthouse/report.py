@@ -1,5 +1,5 @@
-from insight_tool import settings
-from insight_tool.utils import tribe_score
+from lighthouse import settings
+from lighthouse.utils import tribe_score
 
 
 class LighthouseReport(dict):
