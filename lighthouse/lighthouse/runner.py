@@ -13,16 +13,15 @@ class LighthouseRunner:
     MAIN = "lighthouse"
 
     def __init__(
-            self,
-            url,
-            file_path,
-            emulated_form_factor="desktop",
-            chrome_flags="--headless --disable-gpu --no-sandbox",
-            preset="perf",
-            output="json",
+        self,
+        url,
+        file_path,
+        emulated_form_factor="desktop",
+        chrome_flags="--headless --disable-gpu --no-sandbox",
+        preset="perf",
+        output="json",
     ):
-        """ Parameters matches the cli, saving as a json is implied.
-        """
+        """Parameters matches the cli, saving as a json is implied."""
         assert emulated_form_factor in ["mobile", "desktop"]
 
         self.command = [
@@ -37,7 +36,9 @@ class LighthouseRunner:
 
     def run(self):
         """Executes lighthouse within a subshell and returns the exit code"""
-        process = subprocess.run(self.command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        process = subprocess.run(
+            self.command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
         print(f"Process completed with exit status:{process.returncode}")
         return process.returncode
 
@@ -47,12 +48,12 @@ class LighthouseRunner:
 
 
 @click.command()
-@click.argument('url')
-@click.argument('path')
+@click.argument("url")
+@click.argument("path")
 def main(url, path):
-    """ Entrypoint for the lighthouse runner, it requires two arguments in order:
-        * An url to be tested.
-        * A file path where the report will be saved.
+    """Entrypoint for the lighthouse runner, it requires two arguments in order:
+    * An url to be tested.
+    * A file path where the report will be saved.
     """
     return_code = LighthouseRunner(url, path)()
     sys.exit(return_code)
