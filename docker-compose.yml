@@ -1,5 +1,13 @@
 version: '3'
+
+volumes:
+  django-data:
+
 services:
 
-  insight:
-    build: .
+  prospect:
+    build: ./insight
+    volumes:
+    - "django-data:/database"
+    ports:
+    - "80:80"
