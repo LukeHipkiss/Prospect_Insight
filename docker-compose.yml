@@ -3,8 +3,15 @@ version: '3'
 volumes:
   reports_data:
     driver: "local"
+  django-data:
+    driver: "local"
 
 services:
+
+  prospect:
+    build: ./insight
+    volumes:
+    - "django-data:/database"
 
   lighthouse:
     build: ./lighthouse
