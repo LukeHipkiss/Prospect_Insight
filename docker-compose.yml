@@ -29,5 +29,6 @@ services:
       - "reports_data:/reports"
     depends_on:
       - 'lighthouse'
+      - 'prospect'
     ports:
     - "80:80"
