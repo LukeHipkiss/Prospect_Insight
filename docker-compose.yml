@@ -11,7 +11,9 @@ services:
   prospect:
     build: ./insight
     volumes:
-    - "django-data:/database"
+      - "django-data:/database"
+    environment:
+      - "SECRET_KEY=6tdp62idf"
 
   lighthouse:
     build: ./lighthouse
@@ -26,6 +28,7 @@ services:
       context: './nginx'
     volumes:
       - './nginx/config:/etc/nginx'
+      - './nginx/static:/static'
       - "reports_data:/reports"
     depends_on:
       - 'lighthouse'
