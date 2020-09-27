@@ -9,11 +9,14 @@ A flask server with a single endpoint which triggers google lighthouse.
 * Spin the container up by running `docker-compose up` from the root of the project.
 * Then send a post request as per below:
 ```bash
-curl -X POST  -H 'Content-Type: application/json' -d '{"args": ["https://www.google.com", "/home/chrome/reports/test.json"]}' http://localhost:4000/lighthouse 
+curl -X POST  -H 'Content-Type: application/json' -d '{"args": ["https://www.google.com", "/home/chrome/reports/test.json"]}' http://localhost/lighthouse/ 
 ```
- 
- Or alternatively do the same with python `requests`.
- 
+ *Or alternatively do the same with python `requests`.
+
+### Reports:
+
+* View reports by visiting http://localhost/reports
+
 ### Dependencies:
 
 There are no external dependencies, but the image uses the following.

@@ -1,11 +1,26 @@
 version: '3'
+
+volumes:
+  reports_data:
+    driver: "local"
+
 services:
 
   lighthouse:
     build: ./lighthouse
     volumes:
     - "./lighthouse/lighthouse:/lighthouse"
+    - "reports_data:/home/chrome/reports"
     command:
       - "/lighthouse/server.py"
+
+  nginx:
+    build:
+      context: './nginx'
+    volumes:
+      - './nginx/config:/etc/nginx'
+      - "reports_data:/reports"
+    depends_on:
+      - 'lighthouse'
     ports:
-    - "4000:4000"
+    - "80:80"
