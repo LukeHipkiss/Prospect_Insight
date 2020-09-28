@@ -12,6 +12,7 @@ services:
     build: ./insight
     volumes:
       - "django-data:/database"
+      - "./insight:/insight"
     environment:
       - "SECRET_KEY=6tdp62idf"
 
