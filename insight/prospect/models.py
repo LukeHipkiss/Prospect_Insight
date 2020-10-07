@@ -3,6 +3,9 @@ from django.db import models
 
 class Prospect(models.Model):
     name = models.CharField(max_length=200, unique=True)
+    reports = models.IntegerField(default=0)
+    last = models.DateTimeField(auto_now=True)
+    last_tag = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name

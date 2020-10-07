@@ -29,12 +29,13 @@
 
         <nav class="navbar navbar-expand-sm bg-white navbar-light justify-content-center rounded mt-2">
 
-            <form class="form-inline" action="report.html">
+            <form class="form-inline" action="{% url 'prospect:analyse' %}" method="post">
+                {% csrf_token %}
 
                 <div class="row">
 
                     <div class="form-group">
-                        <select class="form-control" required>
+                        <select name="prospect" class="form-control" required>
                             <option value="">Choose Prospect</option>
                         {% for prospect in prospects %}
                             <option value="{{ prospect.name }}">{{ prospect.name }}</option>
@@ -115,41 +116,13 @@
                   </tr>
                 </thead>
                 <tbody id="prospect-table-body" class="rounded">
-                  <tr>
-                    <td><a href="report.html">Fitflop</a></td>
-                    <td>3</td>
-                    <td>20/08/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">Allsaints</a></td>
-                    <td>1</td>
-                    <td>10/09/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">Liverpool</a></td>
-                    <td>6</td>
-                    <td>21/09/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">WoS</a></td>
-                    <td>3</td>
-                    <td>20/08/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">Made</a></td>
-                    <td>1</td>
-                    <td>10/09/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">GHD</a></td>
-                    <td>6</td>
-                    <td>21/09/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">Dreams</a></td>
-                    <td>3</td>
-                    <td>20/08/2020</td>
-                  </tr>
+                    {% for prospect in prospects|slice:":9" %}
+                      <tr>
+                        <td><a>{{ prospect.name }}</a></td>
+                        <td>{{ prospect.reports }}</td>
+                        <td>{{ prospect.last }}</td>
+                      </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
