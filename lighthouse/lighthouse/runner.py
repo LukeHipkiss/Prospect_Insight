@@ -1,59 +1,41 @@
-import os
 import sys
 import subprocess
 
-import click
+MAIN = "lighthouse"
+REPORTS_PATH = "/home/chrome/reports/"
 
 
-class LighthouseRunner:
-    """Lightweight runner, wraps around lighthouse-cli.
+def light_worker(
+    url,
+    tag,
+    type,
+    emulated_form_factor="desktop",
+    chrome_flags="--headless --disable-gpu --no-sandbox",
+    preset="perf",
+    output="json",
+):
+    """ Wraps around lighthouse-cli.
     https://github.com/GoogleChrome/lighthouse#cli-options
     """
+    assert emulated_form_factor in ["mobile", "desktop"]
 
-    MAIN = "lighthouse"
+    file_path = REPORTS_PATH + f"{tag}-{type}.json"
 
-    def __init__(
-        self,
+    command = [
+        MAIN,
         url,
-        file_path,
-        emulated_form_factor="desktop",
-        chrome_flags="--headless --disable-gpu --no-sandbox",
-        preset="perf",
-        output="json",
-    ):
-        """Parameters matches the cli, saving as a json is implied."""
-        assert emulated_form_factor in ["mobile", "desktop"]
+        f"--chrome-flags={chrome_flags}",
+        f"--preset={preset}",
+        f"--emulated-form-factor={emulated_form_factor}",
+        f"--output={output}",
+        f"--output-path={file_path}",
+    ]
 
-        self.command = [
-            self.MAIN,
-            url,
-            f"--chrome-flags={chrome_flags}",
-            f"--preset={preset}",
-            f"--emulated-form-factor={emulated_form_factor}",
-            f"--output={output}",
-            f"--output-path={os.path.join(file_path)}",
-        ]
+    process = subprocess.run(command, stdout=sys.stdout, stderr=subprocess.STDOUT)
 
-    def run(self):
-        """Executes lighthouse within a subshell and returns the exit code"""
-        process = subprocess.run(
-            self.command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-        )
-        print(f"Process completed with exit status:{process.returncode}")
-        return process.returncode
-
-    def __call__(self):
-        """Convenience call to simplify interface"""
-        return self.run()
+    return process.returncode
 
 
-@click.command()
-@click.argument("url")
-@click.argument("path")
-def main(url, path):
-    """Entrypoint for the lighthouse runner, it requires two arguments in order:
-    * An url to be tested.
-    * A file path where the report will be saved.
-    """
-    return_code = LighthouseRunner(url, path)()
-    sys.exit(return_code)
+if __name__ == '__main__':
+
+    r = light_worker("https://www.google.com", "abc123", "test")

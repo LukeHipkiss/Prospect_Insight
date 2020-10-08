@@ -42,8 +42,6 @@ RUN pip install .
 
 USER chrome
 
-ENTRYPOINT ["python"]
-
-CMD ["/lighthouse/lighthouse/server.py"]
+ENTRYPOINT ["rq"]
 
 ENV PYTHONUNBUFFERED=1

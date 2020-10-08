@@ -1,12 +1,19 @@
 version: '3'
 
 volumes:
-  reports_data:
+  reports-data:
     driver: "local"
   django-data:
     driver: "local"
+  redis-data:
+    driver: "local"
 
 services:
+
+  redis:
+    image: library/redis:6-alpine
+    volumes:
+    - "redis-data:/data"
 
   prospect:
     build: ./insight
@@ -18,11 +25,17 @@ services:
 
   lighthouse:
     build: ./lighthouse
+    init: True
     volumes:
     - "./lighthouse/lighthouse:/lighthouse"
-    - "reports_data:/home/chrome/reports"
+    - "reports-data:/home/chrome/reports"
     command:
-      - "/lighthouse/server.py"
+      - "worker"
+      - "-u"
+      - "redis://redis:6379"
+    shm_size: "1gb"
+    depends_on:
+      - 'redis'
 
   nginx:
     build:
@@ -30,9 +43,8 @@ services:
     volumes:
       - './nginx/config:/etc/nginx'
       - './nginx/static:/static'
-      - "reports_data:/reports"
+      - "reports-data:/reports"
     depends_on:
-      - 'lighthouse'
       - 'prospect'
     ports:
     - "80:80"

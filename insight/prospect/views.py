@@ -10,12 +10,12 @@ from prospect.models import Prospect, Report
 
 def index(request):
     context = {"prospects": Prospect.objects.all()}
-    return render(request, 'prospect/index.html', context)
+    return render(request, "prospect/index.html", context)
 
 
 def report(request):
     context = {"test": "This is a test context"}
-    return render(request, 'prospect/report.html', context)
+    return render(request, "prospect/report.html", context)
 
 
 def add_prospect(request):
@@ -41,7 +41,9 @@ def generate_report(request):
 
     # Quick sanity check, so we don't mess the database
     if not all([prospect, prospect_url, comp_one_url, comp_two_url]):
-        raise Http404("Missing one of the parameters, ensure valid parameters have been passed.")
+        raise Http404(
+            "Missing one of the parameters, ensure valid parameters have been passed."
+        )
 
     # Setup things to store
     prospect_obj = Prospect.objects.get(name=prospect)
@@ -49,15 +51,24 @@ def generate_report(request):
 
     # Create the 3 report entries to be compared. (I purposefully don't loop here)
     Report.objects.create(
-        prospect=prospect_obj, url=prospect_url, tag=uid, ref=f"http://localhost/reports/pro-{uid}.json"
+        prospect=prospect_obj,
+        url=prospect_url,
+        tag=uid,
+        ref=f"http://localhost/reports/pro-{uid}.json",
     )
 
     Report.objects.create(
-        prospect=prospect_obj, url=comp_one_url, tag=uid, ref=f"http://localhost/reports/c1-{uid}.json"
+        prospect=prospect_obj,
+        url=comp_one_url,
+        tag=uid,
+        ref=f"http://localhost/reports/c1-{uid}.json",
     )
 
     Report.objects.create(
-        prospect=prospect_obj, url=comp_two_url, tag=uid, ref=f"http://localhost/reports/c2-{uid}.json"
+        prospect=prospect_obj,
+        url=comp_two_url,
+        tag=uid,
+        ref=f"http://localhost/reports/c2-{uid}.json",
     )
 
     # Update the equivalent prospect row's number of reports and last time generated
