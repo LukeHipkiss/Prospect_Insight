@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from prospect.models import Prospect, Report
+from prospect.queue import schedule_report
 
 
 def index(request):
@@ -49,26 +50,25 @@ def generate_report(request):
     prospect_obj = Prospect.objects.get(name=prospect)
     uid = uuid4()
 
+    schedule_report([prospect_url, comp_one_url, comp_two_url], uid, prospect_obj.name)
+
     # Create the 3 report entries to be compared. (I purposefully don't loop here)
     Report.objects.create(
         prospect=prospect_obj,
         url=prospect_url,
         tag=uid,
-        ref=f"http://localhost/reports/pro-{uid}.json",
     )
 
     Report.objects.create(
         prospect=prospect_obj,
         url=comp_one_url,
         tag=uid,
-        ref=f"http://localhost/reports/c1-{uid}.json",
     )
 
     Report.objects.create(
         prospect=prospect_obj,
         url=comp_two_url,
         tag=uid,
-        ref=f"http://localhost/reports/c2-{uid}.json",
     )
 
     # Update the equivalent prospect row's number of reports and last time generated

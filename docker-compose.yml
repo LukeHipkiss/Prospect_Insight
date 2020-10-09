@@ -1,4 +1,4 @@
-version: '3'
+version: '2.2'
 
 volumes:
   reports-data:
@@ -22,10 +22,12 @@ services:
       - "./insight:/insight"
     environment:
       - "SECRET_KEY=6tdp62idf"
+    depends_on:
+      - 'redis'
 
   lighthouse:
     build: ./lighthouse
-    init: True
+    init: true
     volumes:
     - "./lighthouse/lighthouse:/lighthouse"
     - "reports-data:/home/chrome/reports"

@@ -113,14 +113,17 @@
                     <th>Prospect</th>
                     <th>Reports</th>
                     <th>Last Report</th>
+                    <th>Last Tag</th>
                   </tr>
                 </thead>
                 <tbody id="prospect-table-body" class="rounded">
                     {% for prospect in prospects %}
                       <tr>
-                        <td><a href="{% url 'prospect:report' %}">{{ prospect.name }}</a></td>
+                        <td><a href="reports/">{{ prospect.name }}</a></td>
                         <td>{{ prospect.reports }}</td>
                         <td>{{ prospect.last }}</td>
+                        <td>{{ prospect.last_tag }}</td>
+
                       </tr>
                     {% endfor %}
                 </tbody>

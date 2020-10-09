@@ -8,18 +8,18 @@ REPORTS_PATH = "/home/chrome/reports/"
 def light_worker(
     url,
     tag,
-    type,
+    _type,
     emulated_form_factor="desktop",
     chrome_flags="--headless --disable-gpu --no-sandbox",
     preset="perf",
     output="json",
 ):
-    """ Wraps around lighthouse-cli.
+    """Wraps around lighthouse-cli.
     https://github.com/GoogleChrome/lighthouse#cli-options
     """
     assert emulated_form_factor in ["mobile", "desktop"]
 
-    file_path = REPORTS_PATH + f"{tag}-{type}.json"
+    file_path = REPORTS_PATH + f"{tag}-{_type}.json"
 
     command = [
         MAIN,
@@ -36,6 +36,6 @@ def light_worker(
     return process.returncode
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     r = light_worker("https://www.google.com", "abc123", "test")
