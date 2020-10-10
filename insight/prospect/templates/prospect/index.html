@@ -122,7 +122,7 @@
                         <td><a href="reports/">{{ prospect.name }}</a></td>
                         <td>{{ prospect.reports }}</td>
                         <td>{{ prospect.last }}</td>
-                        <td>{{ prospect.last_tag }}</td>
+                          <td><a href="reports/{{ prospect.last_tag }}-main.report.html">{{ prospect.last_tag }}</a></td>
 
                       </tr>
                     {% endfor %}
