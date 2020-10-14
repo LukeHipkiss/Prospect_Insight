@@ -34,11 +34,30 @@ Create a file at the root of the project called `.env` and add the following env
 * `MINIO_SECRET_KEY` password for the minio interface
 * `MINIO_URL` i.e `MINIO_URL=http://minio:9000`
 
-Add list of make commands here.
+### Development environment:
+
+Only spins 1 worker, and uses the development server on django.
+
+For a first setup:
+* `make setup-git-hooks` to make sure you don't commit rubbish :D
+* `make provision` to build the project images and migrate database
+* `make up` to spin the project up
+
+### Production environment: 
+
+Uses gunicorn as a wsgi and spins 3 workers, it ensures containers remains up and also logs output to file.
+
+* `make provision`
+* `make prod-up`
+
+There's a series of helpful commands for development, debug and maintenance, check it out by running `make help`
 
 ## Test
 
-Add how to run tests here.
+Currently only linters and a basic health check has been added. (Unit test and Integration tests to be added...)
+
+* `make lint` to lint the project.
+* `make health-checks` to check the health status of the containers, the project needs to be up before hand.
 
 ### Report Object Breakdown
 
@@ -88,6 +107,7 @@ The metrics stored alongside their individual score weighting used to find the o
 ## Dependencies
 - Docker
 - Docker-compose
+- Make
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

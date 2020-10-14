@@ -1,0 +1,24 @@
+#!/bin/bash
+
+. ./scripts/styles
+
+# improve legibility of output
+printf "\n"
+
+docker run --rm \
+    -v /tmp:/tmp \
+    -v "${PWD}":/code \
+    --entrypoint flake8 \
+    prospect_prospect \
+    --max-line-length=120 \
+    --exclude "*nolint*" \
+    /code/; \
+    exit_code=$?
+
+if [ "$exit_code" -eq 0 ]; then
+    printf "%sPython files linted successfully!%s\n" "${GREEN}" "${NORMAL}"
+else
+    printf "%sPython files failed linting!%s\n" "${RED}" "${NORMAL}"
+fi
+
+exit "$exit_code"

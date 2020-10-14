@@ -1,0 +1,37 @@
+#!/bin/bash
+
+. ./scripts/styles
+
+final_out=""
+final_exit_code=0
+
+update_exit_code() {
+    exit_code=$1
+    if [ "${final_exit_code}" -eq 0 ] && [ ! "${exit_code}" -eq 0 ]; then
+        final_exit_code=$1
+    fi
+}
+
+build_lint_output () {
+    # $1 human friendly name, $2 make recipe name
+    printf "\n${POWDER_BLUE}RUNNING %s${NORMAL}\n" "$1"
+    linting_out=$(make -s "$2"); update_exit_code $?
+    printf "%s\n" "${linting_out}"
+
+    final_out="$(printf "%s\n\n%sERRORS for %s %s" "${final_out}" "${MAGENTA}" "$1" "${NORMAL}")" 
+    final_out="$(printf "%s%s\n\n" "${final_out}" "${linting_out}")"
+}
+
+
+build_lint_output "Shellcheck" "shellcheck_lint"
+
+build_lint_output "Hadolint" "hadolint_lint"
+
+build_lint_output "Compose lint" "docker-compose_lint"
+
+build_lint_output "Python lint" "python_lint"
+
+printf "\n\n%s     ERRORS SUMMARY%s" "${RED}" "${NORMAL}"
+printf "%s\n" "${final_out}"
+
+exit "${final_exit_code}"
