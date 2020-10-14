@@ -1,0 +1,56 @@
+version: '2.2'
+
+services:
+
+  prospect:
+    entrypoint: "gunicorn"
+    command: ["--bind", "0.0.0.0:80", "--worker-tmp-dir", "/dev/shm", "--workers=2", "--threads=4", "--worker-class=gthread", "insight.wsgi:application"]
+    shm_size: "1gb"
+    restart: "unless-stopped"
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"
+
+  lighthouse:
+    restart: "unless-stopped"
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"
+
+  nginx:
+    ports:
+      - "80:80"
+    restart: "unless-stopped"
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"
+
+  redis:
+    restart: "unless-stopped"
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"
+
+  minio:
+    restart: "unless-stopped"
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"
+
+  queue_dashboard:
+    restart: "unless-stopped"
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "5"
+            max-size: "10m"

@@ -1,17 +1,11 @@
 import os
 import sys
 import subprocess
+import logging
 
-import boto3
-from botocore.client import Config
+from lighthouse.s3 import get_or_create_bucket
 
-
-s3 = boto3.resource('s3',
-                    endpoint_url='http://minio:9000',
-                    aws_access_key_id='AKIAIOSFODNN7EXAMPLE',
-                    aws_secret_access_key='wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
-                    config=Config(signature_version='s3v4'),
-                    region_name='us-east-1')
+logger = logging.getLogger(__name__)
 
 MAIN = "lighthouse"
 REPORTS_PATH = "/home/chrome/reports/"
@@ -19,7 +13,8 @@ REPORTS_PATH = "/home/chrome/reports/"
 
 def light_worker(
     url,
-    file_name,
+    tag,
+    _type,
     prospect,
     emulated_form_factor="desktop",
     chrome_flags="--headless --disable-gpu --no-sandbox",
@@ -31,7 +26,7 @@ def light_worker(
     """
     assert emulated_form_factor in ["mobile", "desktop"]
 
-    file_path = REPORTS_PATH + file_name
+    file_path = REPORTS_PATH + f"{tag}-{_type}"
 
     command = [
         MAIN,
@@ -46,11 +41,13 @@ def light_worker(
     process = subprocess.run(command, stdout=sys.stdout, stderr=subprocess.STDOUT)
 
     if process.returncode == 0:
-        bucket = s3.Bucket(prospect)
-        if not bucket.creation_date:
-            bucket = s3.create_bucket(Bucket=prospect)
 
-        bucket.upload_file(f"{file_path}.report.json", f"{file_name}.report.json")
+        try:
+            # We should break this dependency by having a different service upload the file, not urgent though...
+            bucket = get_or_create_bucket(prospect)
+            bucket.upload_file(f"{file_path}.report.json", f"{tag}/{_type}.report.json")
+        except Exception:
+            logger.exception("Failed to upload report to s3")
 
         os.remove(f"{file_path}.report.json")
 
@@ -59,4 +56,4 @@ def light_worker(
 
 if __name__ == "__main__":
 
-    r = light_worker("https://www.google.com", "abc123", "fitflop")
+    light_worker("https://www.google.com", "abc123", "main", "fitflop")

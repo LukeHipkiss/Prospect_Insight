@@ -8,4 +8,5 @@ urlpatterns = [
     path("report", views.report, name="report"),
     path("add", views.add_prospect, name="add"),
     path("analyse", views.generate_report, name="analyse"),
+    path("status", views.check_report_status, name="status"),
 ]

@@ -1,17 +1,10 @@
-# Lighthouse as a Service
+# Lighthouse worker
 
 ### Description:
 
-A flask server with a single endpoint which triggers google lighthouse.
-
-### Usage:
-
-* Spin the container up by running `docker-compose up` from the root of the project.
-* Then send a post request as per below:
-```bash
-curl -X POST  -H 'Content-Type: application/json' -d '{"args": ["https://www.google.com", "/home/chrome/reports/test.json"]}' http://localhost/lighthouse/ 
-```
- *Or alternatively do the same with python `requests`.
+A sub-project containing lighthouse, google chrome, and a redis queue worker.
+The worker collects jobs from redis and wire it to lighthouse in order to generate reports.
+It is scalable to cope with load by simply spinning up extra instances.
 
 ### Reports:
 
@@ -22,8 +15,6 @@ curl -X POST  -H 'Content-Type: application/json' -d '{"args": ["https://www.goo
 There are no external dependencies, but the image uses the following.
 
 * [Python 3.8](https://www.python.org/)
-    * [Click](https://click.palletsprojects.com/en/7.x/)
-    * [Flask](https://flask.palletsprojects.com/en/1.1.x/)
-    * [flask_shell2http](https://flask-shell2http.readthedocs.io/en/stable/Quickstart.html)
 * [Google lighthouse](https://github.com/GoogleChrome/lighthouse)
+* [rq](http://python-rq.org/docs/workers/)
 * Google Chrome

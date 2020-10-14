@@ -122,7 +122,7 @@
                         <td><a href="reports/">{{ prospect.name }}</a></td>
                         <td>{{ prospect.reports }}</td>
                         <td>{{ prospect.last }}</td>
-                          <td><a href="reports/{{ prospect.last_tag }}-main.report.html">{{ prospect.last_tag }}</a></td>
+                        <td><a href="reports/{{ prospect.last_tag }}-main.report.html">{{ prospect.last_tag }}</a></td>
 
                       </tr>
                     {% endfor %}
@@ -131,6 +131,74 @@
         </div>
 
     </section>
+
+
+    <section class="justify-content-center">
+
+        <div class="row">
+            <hr class="mt-5 col-6">
+        </div>
+
+        <div class="row container justify-content-center m-auto">
+            <h3 class="text-tribe">Notifications</h3>
+        </div>
+
+        <div class="container mt-3">
+
+            <table class="table table-hover table-light border rounded">
+                <thead class="table-light border">
+                  <tr>
+                    <th>Engine Status</th>
+                    <th>Engine Message</th>
+
+                  </tr>
+                </thead>
+                <tbody class="rounded">
+                  <tr>
+                    {% if request.session.ongoing_report %}
+                        <td id="status">Busy</td>
+                    {% else %}
+                        <td id="status">Available</td>
+                    {% endif %}
+                        <td id="message"></td>
+                  </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+    {% if messages %}
+        {% for message in messages %}
+            <script>
+                alert("{{ message }}");
+            </script>
+        {% endfor %}
+    {% endif %}
+
+    {% if request.session.ongoing_report %}
+    <script>
+        (function poll() {
+        setTimeout(function() {
+            $.ajax({
+                url: "{% url 'prospect:status' %}",
+                type: "GET",
+                success: function(data) {
+                    $("#status").text(data["status"])
+                    $("#message").text(data["response"])
+                    if (data["status"] == "Available"){
+                        location.reload(true);
+                    }
+                },
+                dataType: "json",
+                complete: poll,
+                timeout: 2000
+            })
+        }, 10000);
+        })();
+    </script>
+    {% endif %}
 
 </body>
 </html>

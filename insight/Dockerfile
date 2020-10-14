@@ -8,6 +8,4 @@ RUN pip install .
 
 ENTRYPOINT [ "python" ]
 
-CMD ["manage.py", "runserver", "0.0.0.0:80"]
-
 ENV PYTHONUNBUFFERED=1
