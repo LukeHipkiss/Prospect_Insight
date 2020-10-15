@@ -75,12 +75,5 @@ services:
     image: "eoranged/rq-dashboard:v0.6.3"
     environment:
       - "RQ_DASHBOARD_REDIS_URL=redis://redis:${REDIS_PORT}"
-    healthcheck:
-      test: [ 'CMD', 'nc', '-w5', '-z', '-v', '0.0.0.0', '9181' ]
     depends_on:
       - 'redis'
-    logging:
-        driver: "json-file"
-        options:
-            max-file: "5"
-            max-size: "10m"

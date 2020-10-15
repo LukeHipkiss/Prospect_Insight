@@ -3,6 +3,7 @@ FROM python:3.8-slim-buster
 LABEL name="lighthouse"
 
 # Install deps + add Chrome Stable + purge all the things
+# hadolint ignore=DL3008,DL4006
 RUN apt-get update && apt-get install -y \
   apt-transport-https \
   ca-certificates \
@@ -28,7 +29,7 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 
 ARG CACHEBUST=1
-RUN npm install -g lighthouse
+RUN npm install -g lighthouse@6.4.1
 
 # Add Chrome as a user
 RUN groupadd -r chrome && useradd -r -g chrome -G audio,video chrome \
