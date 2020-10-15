@@ -1,0 +1,31 @@
+#!/bin/bash
+
+. ./scripts/styles
+
+# Run shellcheck on all shell scripts in the repo. 
+# returns a final exit code without short-circuiting on the first bad file.
+
+tag=v0.7.1
+image=koalaman/shellcheck:"${tag}"
+shellscripts=$(find . ! -name '*nolint*' ! -path "*git*" -type f \( -perm -u=x -o -perm -g=x -perm -o=x \) -exec file {} + \
+    | grep "ASCII text executable" \
+    | awk 'BEGIN { FS = ":" } ; { print $1 }')
+
+# shellcheck disable=SC2068 
+docker run \
+    -w "/prospect" --rm \
+    -v /tmp:/tmp \
+    -v "${PWD}":/prospect \
+    "${image}" \
+    -P "/prospect/" \
+    -x \
+    ${shellscripts[@]};
+exit_code=$? \
+
+if [ "${exit_code}" -eq 0 ]; then
+    printf "\n%sBash scripts linted successfully!%s\n" "${GREEN}" "${NORMAL}"
+else
+    printf "\n%sBash scripts failed linting!%s\n" "${RED}" "${NORMAL}"
+fi
+
+exit "${exit_code}"

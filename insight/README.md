@@ -1,13 +1,8 @@
-# Main App
+# Prospect Insight App
 
 ### Description:
 
-A django application, which will house the bulk of the prospect insight project.
-
-### Usage:
-
-* Spin the container up by running `docker-compose up` from the root of the project.
-* Visit http://localhost, e voila...
+A simple django app mostly using default settings.
  
 ### Dependencies:
 

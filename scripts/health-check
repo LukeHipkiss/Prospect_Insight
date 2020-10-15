@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# This script checks the health of all containers related to this project. 
+# It should be run locally from the main project directory with "make health-checks"
+
+echo Starting health checks on containers...
+
+COMPOSE_PROJECT_NAME=prospect
+
+CONTAINERS=$(docker ps --format "{{.Names}}" --filter="name=$COMPOSE_PROJECT_NAME" )
+
+if [ -z "$CONTAINERS" ]; then
+    echo "No containers found"
+    exit 1
+fi
+
+for CONTAINER_NAME in $CONTAINERS; do
+
+    CONTAINER_HEALTH=$(docker inspect --format='{{json .State.Health}}' "$CONTAINER_NAME")
+
+    if [[ $CONTAINER_HEALTH == null ]];then
+      echo "Skipping $CONTAINER_NAME, no health check available."
+      continue
+    fi
+
+    counter=0
+    while :
+     do
+        HEALTH_STATUS=$(docker inspect --format='{{json .State.Health.Status}}' "$CONTAINER_NAME")
+
+        if [[ $counter -ge $HEALTH_CHECK_TIMEOUT ||  "$HEALTH_STATUS" == '"unhealthy"' ]]; then
+            echo "Health check failed for $CONTAINER_NAME with status: $HEALTH_STATUS. TTF: $counter"
+            exit 1
+        fi
+
+        echo -ne "$CONTAINER_NAME is $HEALTH_STATUS. Wait: $counter seconds \r"
+
+        if [ "$HEALTH_STATUS" == '"healthy"' ]; then
+            echo "" # Make sure we leave the output of the last check.
+            break
+        fi
+
+        counter=$((counter+1))
+        sleep 1
+     done
+done

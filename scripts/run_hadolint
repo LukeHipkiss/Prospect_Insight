@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Run hadolint on all dockerfiles in the repo.
+# returns a final exit code without short circuiting on the first failure.
+
+. ./scripts/styles
+
+dockerfiles=$(find ./ ! -name '*nolint*' -type f -name "Dockerfile" )
+
+tag=v1.18.0-alpine
+image=hadolint/hadolint:"${tag}"
+
+# shellcheck disable=SC2068 
+docker run \
+    -w "/prospect/" \
+    -v /tmp:/tmp \
+    -v "${PWD}":/prospect/ --rm \
+    -i "${image}" \
+    hadolint ${dockerfiles[@]}; exit_code=$?
+
+if [ "${exit_code}" -eq 0 ]; then
+    printf "\n%sDockerfiles linted successfully!%s\n" "${GREEN}" "${NORMAL}"
+else
+    printf "\n%sDockerfiles failed linting!%s\n" "${RED}" "${NORMAL}"
+fi
+
+exit "${exit_code}"

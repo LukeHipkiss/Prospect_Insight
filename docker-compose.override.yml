@@ -1,0 +1,26 @@
+version: '2.2'
+
+services:
+
+  prospect:
+    command: [ "manage.py", "runserver", "0.0.0.0:80" ]
+    volumes:
+      - "django-data:/database"
+      - "./insight:/insight"  # To ease development, applies local changes in real time
+
+  lighthouse:
+    volumes:
+      - "reports-data:/home/chrome/reports"
+      - "./lighthouse:/lighthouse"  # To ease development, applies local changes in real time
+
+  nginx:
+    ports:
+      - "80:80"
+
+  minio:
+    ports:
+      - "9000:9000"
+
+  queue_dashboard:
+    ports:
+    - "9181:9181"

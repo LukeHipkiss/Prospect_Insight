@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Prospect Insighter</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="css/bootstrap.css">
     <script src="js/bootstrap.js"></script>
@@ -18,7 +16,7 @@
 <body>
 
     <div class="row container justify-content-center m-auto">
-        <a href="index.html">
+        <a href="{% url 'prospect:index' %}">
             <img src="https://scivisum-email-static-content.s3-eu-west-1.amazonaws.com/Tribe+Logo.png" alt="ThinkTribe Logo" id="tribe-logo" class="img-responsive my-3" width="120" height="auto">
         </a>
     </div>
@@ -31,58 +29,31 @@
 
         <nav class="navbar navbar-expand-sm bg-white navbar-light justify-content-center rounded mt-2">
 
-            <form class="form-inline" action="report.html">
+            <form class="form-inline" action="{% url 'prospect:analyse' %}" method="post">
+                {% csrf_token %}
 
                 <div class="row">
 
                     <div class="form-group">
-                        <select class="form-control">
-                            <option disabled selected>Choose Prospect</option>
-                            <option>Allsaints</option>
-                            <option>Dreams</option>
-                            <option>Fitflop</option>
-                            <option>GHD</option>
-                            <option>Liverpool</option>
-                            <option>Made</option>
-                            <option>WoS</option>
+                        <select name="prospect" class="form-control" required>
+                            <option value="">Choose Prospect</option>
+                        {% for prospect in prospects %}
+                            <option value="{{ prospect.name }}">{{ prospect.name }}</option>
+                        {% endfor %}
                         </select>
                         <button type="button" class="btn btn-tribe ml-1" data-toggle="modal" data-target="#add-new-prospect">+</button>
-                        <!-- The Modal -->
-                        <div class="modal fade mt-5 border-0" id="add-new-prospect">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                        <h4 class="modal-title text-tribe">Add New Prospect</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-
-                                    <!-- Modal body -->
-                                    <div class="modal-body ">
-                                        <form class="form-inline" action="/action_page.php">
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" id="new-prospect-input" placeholder="Prospect">
-                                                <button class="btn btn-tribe ml-2" data-dismiss="modal">Add</button>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="col prospect-url">
-                      <input id="prospect-url" class="form-control mr-sm-2" type="text" placeholder="Prospect URL">
+                      <input pattern="http[s]?:\/\/[a-z]*\.[a-z]*\.[a-z]*" id="prospect-url" class="form-control mr-sm-2" type="text" name="prospecturl" placeholder="Prospect URL" required>
                     </div>
 
                     <div class="col compone-url">
-                      <input id="compone-url" class="form-control mr-sm-2" type="text" placeholder="Competitor URL">
+                      <input pattern="http[s]?:\/\/[a-z]*\.[a-z]*\.[a-z]*" id="compone-url" class="form-control mr-sm-2" type="text" name="comp1url" placeholder="Competitor URL" required>
                     </div>
 
                     <div class="col comptwo-url">
-                      <input id="comptwo-url" class="form-control mr-sm-2" type="text" placeholder="Competitor URL">
+                      <input pattern="http[s]?:\/\/[a-z]*\.[a-z]*\.[a-z]*" id="comptwo-url" class="form-control mr-sm-2" type="text" name="comp2url" placeholder="Competitor URL" required>
                     </div>
 
                     <div class="col">
@@ -91,6 +62,32 @@
 
                 </div>
             </form>
+
+            <!-- The Modal -->
+            <div class="modal fade mt-5 border-0" id="add-new-prospect">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title text-tribe">Add New Prospect</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body ">
+                            <form class="form-inline" action="{% url 'prospect:add' %}" method="post">
+                                {% csrf_token %}
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="name" placeholder="Prospect">
+                                        <button class="btn btn-tribe ml-2" type="submit">Add</button>
+                                    </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
         </nav>
 
@@ -116,49 +113,92 @@
                     <th>Prospect</th>
                     <th>Reports</th>
                     <th>Last Report</th>
+                    <th>Last Tag</th>
                   </tr>
                 </thead>
                 <tbody id="prospect-table-body" class="rounded">
-                  <tr>
-                    <td><a href="report.html">Fitflop</a></td>
-                    <td>3</td>
-                    <td>20/08/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">Allsaints</a></td>
-                    <td>1</td>
-                    <td>10/09/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">Liverpool</a></td>
-                    <td>6</td>
-                    <td>21/09/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">WoS</a></td>
-                    <td>3</td>
-                    <td>20/08/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">Made</a></td>
-                    <td>1</td>
-                    <td>10/09/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">GHD</a></td>
-                    <td>6</td>
-                    <td>21/09/2020</td>
-                  </tr>
-                  <tr>
-                    <td><a href="report.html">Dreams</a></td>
-                    <td>3</td>
-                    <td>20/08/2020</td>
-                  </tr>
+                    {% for prospect in prospects %}
+                      <tr>
+                        <td><a href="reports/">{{ prospect.name }}</a></td>
+                        <td>{{ prospect.reports }}</td>
+                        <td>{{ prospect.last }}</td>
+                        <td><a href="reports/{{ prospect.last_tag }}-main.report.html">{{ prospect.last_tag }}</a></td>
+
+                      </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
 
     </section>
+
+
+    <section class="justify-content-center">
+
+        <div class="row">
+            <hr class="mt-5 col-6">
+        </div>
+
+        <div class="row container justify-content-center m-auto">
+            <h3 class="text-tribe">Notifications</h3>
+        </div>
+
+        <div class="container mt-3">
+
+            <table class="table table-hover table-light border rounded">
+                <thead class="table-light border">
+                  <tr>
+                    <th>Engine Status</th>
+                    <th>Engine Message</th>
+
+                  </tr>
+                </thead>
+                <tbody class="rounded">
+                  <tr>
+                    {% if request.session.ongoing_report %}
+                        <td id="status">Busy</td>
+                    {% else %}
+                        <td id="status">Available</td>
+                    {% endif %}
+                        <td id="message"></td>
+                  </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+
+    {% if messages %}
+        {% for message in messages %}
+            <script>
+                alert("{{ message }}");
+            </script>
+        {% endfor %}
+    {% endif %}
+
+    {% if request.session.ongoing_report %}
+    <script>
+        (function poll() {
+        setTimeout(function() {
+            $.ajax({
+                url: "{% url 'prospect:status' %}",
+                type: "GET",
+                success: function(data) {
+                    $("#status").text(data["status"])
+                    $("#message").text(data["response"])
+                    if (data["status"] == "Available"){
+                        location.reload(true);
+                    }
+                },
+                dataType: "json",
+                complete: poll,
+                timeout: 2000
+            })
+        }, 10000);
+        })();
+    </script>
+    {% endif %}
 
 </body>
 </html>
