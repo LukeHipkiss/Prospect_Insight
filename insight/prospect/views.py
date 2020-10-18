@@ -15,8 +15,8 @@ def index(request):
     return render(request, "prospect/index.html", context)
 
 
-def report(request):
-    context = {"test": "This is a test context"}
+def report(request, report_tag):
+    context = {"test": "Test"}
     return render(request, "prospect/report.html", context)
 
 

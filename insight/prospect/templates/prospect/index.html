@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "prospect/base.html" %}
 
-    <title>Prospect Insighter</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <script src="js/bootstrap.js"></script>
-    <link rel="stylesheet" href="css/mainStyles.css">
-    <script src="js/mainFunctions.js"></script>
-</head>
-<body>
+{% block body %}
 
     <div class="row container justify-content-center m-auto">
         <a href="{% url 'prospect:index' %}">
@@ -112,8 +99,7 @@
                   <tr>
                     <th>Prospect</th>
                     <th>Reports</th>
-                    <th>Last Report</th>
-                    <th>Last Tag</th>
+                    <th>Last Run</th>
                   </tr>
                 </thead>
                 <tbody id="prospect-table-body" class="rounded">
@@ -121,9 +107,12 @@
                       <tr>
                         <td><a href="reports/">{{ prospect.name }}</a></td>
                         <td>{{ prospect.reports }}</td>
-                        <td>{{ prospect.last }}</td>
-                        <td><a href="reports/{{ prospect.last_tag }}-main.report.html">{{ prospect.last_tag }}</a></td>
 
+                        <td>
+                            {% if prospect.last_tag %}
+                                <a href="{% url 'prospect:report' prospect.last_tag %}">{{ prospect.last }}</a>
+                            {% endif %}
+                        </td>
                       </tr>
                     {% endfor %}
                 </tbody>
@@ -134,14 +123,6 @@
 
 
     <section class="justify-content-center">
-
-        <div class="row">
-            <hr class="mt-5 col-6">
-        </div>
-
-        <div class="row container justify-content-center m-auto">
-            <h3 class="text-tribe">Notifications</h3>
-        </div>
 
         <div class="container mt-3">
 
@@ -200,5 +181,4 @@
     </script>
     {% endif %}
 
-</body>
-</html>
+{% endblock %}
