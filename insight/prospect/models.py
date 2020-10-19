@@ -11,12 +11,12 @@ class Prospect(models.Model):
         return self.name
 
     @classmethod
-    def update_last_report(cls, name, tag):
+    def update_last_report(cls, tag):
         """Update the prospect row's number of reports and last time generated
         The timestamp is updated every time the row is touched
         """
-
-        prospect = cls.objects.get(name=name)
+        report = Report.objects.get(tag=tag)
+        prospect = report.prospect
         prospect.reports += 1
         prospect.last_tag = tag
         prospect.save()
@@ -24,16 +24,18 @@ class Prospect(models.Model):
 
 class Report(models.Model):
     prospect = models.ForeignKey(Prospect, on_delete=models.CASCADE)
-    url = models.URLField(max_length=200)
+    main_url = models.URLField(max_length=200)
+    comp1_url = models.URLField(max_length=200)
+    comp2_url = models.URLField(max_length=200)
     date = models.DateTimeField(auto_now_add=True)
-    tag = models.CharField(max_length=200)
+    tag = models.CharField(max_length=200, unique=True)
 
     def __str__(self):
-        return f"Report for {self.prospect}, using url: {self.url} generated on {self.date}"
+        return f"Report for {self.prospect} generated on {self.date}"
 
     @classmethod
     def create_by_tag(cls, prospect_name, urls, tag):
-        """Create 3 reports entries main, competitor one and competitor two all linked one prospect"""
+        """Creates a report """
         prospect = Prospect.objects.get(name=prospect_name)
-        for url in urls:
-            cls.objects.create(prospect=prospect, url=url, tag=tag)
+        main, comp1, comp2 = urls
+        cls.objects.create(prospect=prospect, main_url=main, comp1_url=comp1, comp2_url=comp2, tag=tag)

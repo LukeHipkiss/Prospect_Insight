@@ -18,6 +18,9 @@ services:
       - "django-data:/database"
     environment:
       - "SECRET_KEY=${DJANGO_SECRET_KEY}"
+      - "MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}"
+      - "MINIO_SECRET_KEY=${MINIO_SECRET_KEY}"
+      - "MINIO_URL=${MINIO_URL}"
     healthcheck:
       test: [ 'CMD', 'nc', '-w5', '-z', '-v', '0.0.0.0', '80' ]
     depends_on:

@@ -2,16 +2,6 @@
 
 {% block body %}
 
-    <div class="row container justify-content-center m-auto">
-        <a href="{% url 'prospect:index' %}">
-            <img src="https://scivisum-email-static-content.s3-eu-west-1.amazonaws.com/Tribe+Logo.png" alt="ThinkTribe Logo" id="tribe-logo" class="img-responsive my-3" width="120" height="auto">
-        </a>
-    </div>
-
-    <div class="row container justify-content-center m-auto mt-4">
-        <h1 class="text-tribe">Prospect Insighter</h1>
-    </div>
-
     <section class="container text-center mt-3">
 
         <nav class="navbar navbar-expand-sm bg-white navbar-light justify-content-center rounded mt-2">
@@ -105,7 +95,7 @@
                 <tbody id="prospect-table-body" class="rounded">
                     {% for prospect in prospects %}
                       <tr>
-                        <td><a href="reports/">{{ prospect.name }}</a></td>
+                        <td>{{ prospect.name }}</td>
                         <td>{{ prospect.reports }}</td>
 
                         <td>

@@ -1,16 +1,8 @@
 {% extends "prospect/base.html" %}
 
+{% block title %}{{ prospect }} Performance Report{% endblock %}
+
 {% block body %}
-
-    <div class="row container justify-content-center m-auto">
-        <a href="{% url 'prospect:index' %}">
-            <img src="https://scivisum-email-static-content.s3-eu-west-1.amazonaws.com/Tribe+Logo.png" alt="ThinkTribe Logo" id="tribe-logo" class="img-responsive my-3" width="120" height="auto">
-        </a>
-    </div>
-
-    <div class="row container justify-content-center m-auto mt-4">
-        <h1 class="text-tribe">{{ test }} Performance Report</h1>
-    </div>
 
     <section id="prospect-listing-table" class="justify-content-center">
 
@@ -24,53 +16,54 @@
                 <thead id="report-table-header" class="table-light border">
                 <tr>
                     <th style="width: 40%">Metric</th>
-                    <th>Fitflop</th>
-                    <th>Clarks</th>
-                    <th>Schuh</th>
+                    <th><a href="../../reports/{{ tag }}-main.report.html">{{ prospect }}</a></th>
+                    <th><a href="../../reports/{{ tag }}-comp1.report.html">Competitor 1</a></th>
+                    <th><a href="../../reports/{{ tag }}-comp2.report.html">Competitor 2</a></th>
                 </tr>
                 </thead>
                 <tbody id="report-table-body">
                     <tr>
                         <td>Performance Score</td>
-                        <td class="badge-danger">48</td>
-                        <td class="badge-warning">55</td>
-                        <td class="badge-success">88</td>
+                        {% for report in reports%}
+                        <td class="badge-{{ report.performance_class }}">{{ report.performance_score }}</td>
+                        {% endfor %}
                     </tr>
                     <tr>
                         <td>First Contentful Paint</td>
-                        <td class="text-danger">4.4s</td>
-                        <td class="text-warning">3.2s</td>
-                        <td class="text-success">1.2s</td>
+                        {% for report in reports%}
+                        <td class="text-{{ report.metrics.first_contentful_paint.perf_class }}">{{ report.metrics.first_contentful_paint.timing }}</td>
+                        {% endfor %}
                     </tr>
                     <tr>
                         <td>Speed Index</td>
-                        <td class="text-danger">6.5s</td>
-                        <td class="text-warning">4.7s</td>
-                        <td class="text-success">2.3s</td>
+                        {% for report in reports%}
+                        <td class="text-{{ report.metrics.speed_index.perf_class }}">{{ report.metrics.speed_index.timing }}</td>
+                        {% endfor %}
                     </tr>
                     <tr>
                         <td>Largest Contentful Paint</td>
-                        <td class="text-danger">7.7s</td>
-                        <td class="text-warning">5.0s</td>
-                        <td class="text-success">4.8s</td>
+                        {% for report in reports%}
+                        <td class="text-{{ report.metrics.largest_contentful_paint.perf_class }}">{{ report.metrics.largest_contentful_paint.timing }}</td>
+                        {% endfor %}
                     </tr>
                     <tr>
                         <td>Time to Interactive</td>
-                        <td class="text-danger">7.7s</td>
-                        <td class="text-warning">5.1s</td>
-                        <td class="text-success">4.8s</td>
+                        {% for report in reports%}
+                        <td class="text-{{ report.metrics.interactive.perf_class }}">{{ report.metrics.interactive.timing }}</td>
+                        {% endfor %}
                     </tr>
                     <tr>
                         <td>Total Blocking Time</td>
-                        <td class="text-danger">528ms</td>
-                        <td class="text-warning">400ms</td>
-                        <td class="text-success">280ms</td>
+                        {% for report in reports%}
+                        <td class="text-{{ report.metrics.total_blocking_time.perf_class }}">{{ report.metrics.total_blocking_time.timing }}</td>
+                        {% endfor %}
                     </tr>
                     <tr>
                         <td>Cumulative Layout Shift</td>
-                        <td class="text-danger">0.010</td>
-                        <td class="text-warning">0.008</td>
-                        <td class="text-success">0.002</td>
+                        {% for report in reports%}
+                        <td class="text-{{ report.metrics.cumulative_layout_shift.perf_class }}">{{ report.metrics.cumulative_layout_shift.timing }}</td>
+                        {% endfor %}
+
                     </tr>
                 </tbody>
             </table>

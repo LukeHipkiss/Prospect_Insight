@@ -1,5 +1,4 @@
-from temp_report import settings
-from temp_report.utils import tribe_score
+from prospect.utils import tribe_score, PERFORMANCE_WEIGHTS
 
 
 class LighthouseReport(dict):
@@ -7,7 +6,7 @@ class LighthouseReport(dict):
     https://github.com/GoogleChrome/lighthouse
     """
 
-    PERFORMANCE_WEIGHTS = settings.PERFORMANCE_WEIGHTS
+    PERFORMANCE_WEIGHTS = PERFORMANCE_WEIGHTS
 
     def __init__(self, *args, **kwargs):
         """Initialises the dictionary and sets at root:
@@ -35,14 +34,14 @@ class LighthouseReport(dict):
             metric_score = self["audits"][perf_type]["score"]
             performance_score += metric_score * weight
 
-            self["metrics"][perf_type] = {
+            self["metrics"][perf_type.replace("-", "_")] = {
                 "score": metric_score,
-                "timing": round(self["audits"][perf_type]["numericValue"], 0),
+                "timing": self["audits"][perf_type]["displayValue"],
                 "perf_class": tribe_score(metric_score * 100),
             }
 
         final_score = round(performance_score, 0)
-        self["performance_score"] = final_score
+        self["performance_score"] = int(final_score)
         self["performance_class"] = tribe_score(final_score)
 
     def metric_score(self, metric_name):
@@ -59,14 +58,3 @@ class LighthouseReport(dict):
         """Convenience method for retrieving the performance class for a particular metric."""
         assert metric_name in self.PERFORMANCE_WEIGHTS.keys()
         return self.data["metrics"][metric_name]["perf_class"]
-
-
-if __name__ == "__main__":
-
-    # Temp tests
-    with open("test.json") as f:
-        import json
-
-        report = LighthouseReport(json.load(f))
-
-    assert report.performance_score != 0

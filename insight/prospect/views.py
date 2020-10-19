@@ -8,6 +8,7 @@ from django.contrib import messages
 
 from prospect.models import Prospect, Report
 from prospect.queue import schedule_report, q as queue
+from prospect.s3 import get_json_reports
 
 
 def index(request):
@@ -16,7 +17,16 @@ def index(request):
 
 
 def report(request, report_tag):
-    context = {"test": "Test"}
+
+    rep = Report.objects.get(tag=report_tag)
+
+    reports_data = get_json_reports(rep)
+
+    context = {
+        "prospect": rep.prospect.name,
+        "reports": reports_data,
+        "tag": report_tag
+    }
     return render(request, "prospect/report.html", context)
 
 
@@ -56,10 +66,10 @@ def generate_report(request):
     request.session["main_id"] = main
     request.session["comp1_id"] = comp1
     request.session["comp2_id"] = comp2
+    request.session["tag"] = str(tag)
 
     # Update db
     Report.create_by_tag(prospect, [prospect_url, comp_one_url, comp_two_url], tag)
-    Prospect.update_last_report(prospect, tag)
 
     messages.info(request, "Your report is being prepared!")
     return HttpResponseRedirect(reverse("prospect:index"))
@@ -71,10 +81,12 @@ def check_report_status(request):
     main = request.session.get("main_id")
     comp1 = request.session.get("comp1_id")
     comp2 = request.session.get("comp2_id")
+    tag = request.session.get("tag")
     jobs = [main, comp1, comp2]
 
     if {main, comp1, comp2}.issubset(queue.finished_job_registry.get_job_ids()):
         messages.info(request, "Your report is ready!")
+        Prospect.update_last_report(tag)
 
     elif {main, comp1, comp2}.issubset(queue.failed_job_registry.get_job_ids()):
         messages.info(request, "There has been a problem creating your report.")

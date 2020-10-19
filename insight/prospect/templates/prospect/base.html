@@ -14,6 +14,17 @@
     <script src='{% static "js/mainFunctions.js" %}'></script>
 </head>
 <body>
+
+    <div class="row container justify-content-center m-auto">
+        <a href="{% url 'prospect:index' %}">
+            <img src="https://scivisum-email-static-content.s3-eu-west-1.amazonaws.com/Tribe+Logo.png" alt="ThinkTribe Logo" id="tribe-logo" class="img-responsive my-3" width="120" height="auto">
+        </a>
+    </div>
+
+    <div class="row container justify-content-center m-auto mt-4">
+        <h1 class="text-tribe">{% block title %}Prospects Insight{% endblock %}</h1>
+    </div>
+
 {% block body %}{% endblock %}
 </body>
 </html>
