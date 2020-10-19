@@ -26,6 +26,7 @@ services:
       test: [ 'CMD', 'nc', '-w5', '-z', '-v', '0.0.0.0', '80' ]
     depends_on:
       - 'redis'
+      - 'minio'
 
   lighthouse:
     build: "./lighthouse"
@@ -54,8 +55,6 @@ services:
       test: [ 'CMD', 'nc', '-w5', '-z', '-v', '0.0.0.0', '80' ]
     depends_on:
       - 'prospect'
-      - 'minio'
-      - 'queue_dashboard'
 
   redis:
     image: "library/redis:6-alpine"
