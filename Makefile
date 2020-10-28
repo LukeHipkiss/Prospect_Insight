@@ -1,5 +1,6 @@
 SHELL=/bin/bash
 
+include .env
 ##### Set parameters #####
 
 HEALTH_CHECK_TIMEOUT ?= 60
@@ -14,7 +15,7 @@ help:
 
 ###### MAIN COMMANDS ######
 
-provision: build migrate ## [Provision the project]
+provision: check_env_is_set build makemigrations migrate ## [Provision the project]
 
 up: ## [Start dev environment]
 	@docker-compose up
@@ -35,7 +36,7 @@ migrate: ## [Apply a db migration for the django db]
 	@docker-compose run --rm prospect manage.py migrate
 	@docker-compose stop
 
-dbshell: ## [Get a sqllite shell to the django database]
+dbshell: ## [Get a sqlite shell to the django database]
 	@docker-compose run --rm prospect manage.py dbshell
 	@docker-compose stop
 
@@ -44,6 +45,12 @@ deep-clean: ## [Destroys containers, images, networks and volumes]
 
 setup-git-hooks: ## [Adds pre-commit hooks]
 	git config core.hooksPath .githooks
+
+check_env_is_set:
+ifndef DJANGO_SECRET_KEY
+	@echo "Ensure all variables are set in .env"
+	@exit 1
+endif
 
 ##### Linters #####
 
@@ -64,5 +71,5 @@ lint:  ## [Run all linting tasks]
 
 ##### Testing #####
 
-health-checks:
+health-checks: ## [Check the health of all running containers in the stack]
 	@HEALTH_CHECK_TIMEOUT=${HEALTH_CHECK_TIMEOUT} scripts/health-check
