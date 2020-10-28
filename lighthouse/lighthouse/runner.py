@@ -5,7 +5,9 @@ import logging
 
 from lighthouse.s3 import get_or_create_bucket
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 MAIN = "lighthouse"
 REPORTS_PATH = "/home/chrome/reports/"

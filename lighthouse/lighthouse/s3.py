@@ -16,6 +16,8 @@ s3 = boto3.resource(
 
 def get_or_create_bucket(name: str):
 
+    name = name.lower()  # Buckets can only be lowercase, worst case scenario 2 prospects shares the same bucket.
+
     bucket = s3.Bucket(name)
     if not bucket.creation_date:
         bucket = s3.create_bucket(Bucket=name)
