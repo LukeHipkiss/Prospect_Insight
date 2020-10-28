@@ -1,3 +1,4 @@
+![CI pipeline](https://github.com/LukeHipkiss/Prospect_Insight/workflows/CI%20pipeline/badge.svg)
 # Prospect Insight
 
 ## Description
