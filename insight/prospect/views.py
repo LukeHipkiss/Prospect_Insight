@@ -24,6 +24,8 @@ def report(request, report_tag):
 
     context = {
         "prospect": rep.prospect.name,
+        "comp1": rep.comp1_name,
+        "comp2": rep.comp2_name,
         "reports": reports_data,
         "tag": report_tag
     }
@@ -52,7 +54,9 @@ def generate_report(request):
     # Get parameters from the form
     prospect = request.POST.get("prospect", "")
     prospect_url = request.POST.get("prospecturl", "")
+    comp_one_name = request.POST.get("comp1name", "")
     comp_one_url = request.POST.get("comp1url", "")
+    comp_two_name = request.POST.get("comp2name", "")
     comp_two_url = request.POST.get("comp2url", "")
 
     # Create a unique tag
@@ -69,7 +73,7 @@ def generate_report(request):
     request.session["tag"] = str(tag)
 
     # Update db
-    Report.create_by_tag(prospect, [prospect_url, comp_one_url, comp_two_url], tag)
+    Report.create_by_tag(prospect, comp_one_name, comp_two_name, [prospect_url, comp_one_url, comp_two_url], tag)
 
     messages.info(request, "Your report is being prepared!")
     return HttpResponseRedirect(reverse("prospect:index"))

@@ -25,7 +25,9 @@ class Prospect(models.Model):
 class Report(models.Model):
     prospect = models.ForeignKey(Prospect, on_delete=models.CASCADE)
     main_url = models.URLField(max_length=200)
+    comp1_name = models.CharField(max_length=200, default="Competitor")
     comp1_url = models.URLField(max_length=200)
+    comp2_name = models.CharField(max_length=200, default="Competitor")
     comp2_url = models.URLField(max_length=200)
     date = models.DateTimeField(auto_now_add=True)
     tag = models.CharField(max_length=200, unique=True)
@@ -34,8 +36,16 @@ class Report(models.Model):
         return f"Report for {self.prospect} generated on {self.date}"
 
     @classmethod
-    def create_by_tag(cls, prospect_name, urls, tag):
+    def create_by_tag(cls, prospect_name, comp1_name, comp2_name, urls, tag):
         """Creates a report """
         prospect = Prospect.objects.get(name=prospect_name)
-        main, comp1, comp2 = urls
-        cls.objects.create(prospect=prospect, main_url=main, comp1_url=comp1, comp2_url=comp2, tag=tag)
+        main_url, comp1_url, comp2_url = urls
+        cls.objects.create(
+            prospect=prospect,
+            main_url=main_url,
+            comp1_name=comp1_name,
+            comp1_url=comp1_url,
+            comp2_name=comp2_name,
+            comp2_url=comp2_url,
+            tag=tag
+        )

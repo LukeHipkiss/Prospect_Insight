@@ -4,39 +4,53 @@
 
     <section class="container text-center mt-3">
 
-        <nav class="navbar navbar-expand-sm bg-white navbar-light justify-content-center rounded mt-2">
+        <nav class="navbar navbar-expand-sm navbar-light justify-content-center rounded mt-2">
 
             <form class="form-inline" action="{% url 'prospect:analyse' %}" method="post">
                 {% csrf_token %}
 
                 <div class="row">
 
-                    <div class="form-group">
-                        <select name="prospect" class="form-control" required>
-                            <option value="">Choose Prospect</option>
-                        {% for prospect in prospects %}
-                            <option value="{{ prospect.name }}">{{ prospect.name }}</option>
-                        {% endfor %}
-                        </select>
-                        <button type="button" class="btn btn-tribe ml-1" data-toggle="modal" data-target="#add-new-prospect">+</button>
-                    </div>
+                    <div class="col">
 
-                    <div class="col prospect-url">
-                      <input pattern="http[s]?:\/\/[a-z]*\.[a-z]*\.[a-z]*" id="prospect-url" class="form-control mr-sm-2" type="text" name="prospecturl" placeholder="Prospect URL" required>
-                    </div>
+                        <div class="row">
 
-                    <div class="col compone-url">
-                      <input pattern="http[s]?:\/\/[a-z]*\.[a-z]*\.[a-z]*" id="compone-url" class="form-control mr-sm-2" type="text" name="comp1url" placeholder="Competitor URL" required>
-                    </div>
+                            <div class="form-group mb-1">
+                                <select name="prospect" class="form-control" required>
+                                    <option value="">Choose Prospect</option>
+                                    {% for prospect in prospects %}
+                                    <option value="{{ prospect.name }}">{{ prospect.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button type="button" class="btn btn-tribe ml-2" data-toggle="modal" data-target="#add-new-prospect">+</button>
+                            </div>
+                        </div>
 
-                    <div class="col comptwo-url">
-                      <input pattern="http[s]?:\/\/[a-z]*\.[a-z]*\.[a-z]*" id="comptwo-url" class="form-control mr-sm-2" type="text" name="comp2url" placeholder="Competitor URL" required>
+                        <div class="row">
+                            <input pattern="http[s]?:\/\/[a-z]*\.[a-z]*\.[a-z]*" id="prospect-url" class="form-control mr-sm-2" type="text" name="prospecturl" placeholder="Prospect URL" required>
+                        </div>
+
                     </div>
 
                     <div class="col">
-                        <button class="btn btn-tribe max-width" type="submit">Analyse</button>
+
+                        <input id="compone-name" class="form-control mr-sm-2 mb-1" type="text" name="comp1name" placeholder="Competitor Name" required>
+
+                        <input pattern="http[s]?:\/\/[a-z]*\.[a-z]*\.[a-z]*" id="compone-url" class="form-control mr-sm-2" type="text" name="comp1url" placeholder="Competitor URL" required>
+
                     </div>
 
+                    <div class="col">
+
+                        <input id="comptwo-name" class="form-control mr-sm-2 mb-1" type="text" name="comp2name" placeholder="Competitor Name" required>
+
+                        <input pattern="http[s]?:\/\/[a-z]*\.[a-z]*\.[a-z]*" id="comptwo-url" class="form-control mr-sm-2" type="text" name="comp2url" placeholder="Competitor URL" required>
+
+                    </div>
+
+                    <div class="col my-auto">
+                        <button class="btn btn-tribe max-width " type="submit">Analyse</button>
+                    </div>
                 </div>
             </form>
 
