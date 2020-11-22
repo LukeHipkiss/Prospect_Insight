@@ -20,6 +20,9 @@ provision: check_env_is_set build makemigrations migrate ## [Provision the proje
 up: ## [Start dev environment]
 	@docker-compose up
 
+stop: ## [Stop the production stack]
+	@docker-compose stop
+
 prod-up: ## [Start the production environment]
 	@docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --scale lighthouse=3 -d
 
