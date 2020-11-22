@@ -4,7 +4,7 @@ html {
 
 body {
     min-width: 600px !important;
-    background: linear-gradient(180deg, white 30%, #4193e3 80%, #4193e3 100%);
+    background: linear-gradient(180deg, white 40%, #4193e3 100%);
 }
 
 table td, table th {
