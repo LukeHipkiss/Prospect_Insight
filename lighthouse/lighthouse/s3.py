@@ -14,9 +14,13 @@ s3 = boto3.resource(
 )
 
 
+def sanitise(name: str) -> str:
+    return "".join([c for c in name if c.islower()])
+
+
 def get_or_create_bucket(name: str):
 
-    name = name.lower()  # Buckets can only be lowercase, worst case scenario 2 prospects shares the same bucket.
+    name = sanitise(name)
 
     bucket = s3.Bucket(name)
     if not bucket.creation_date:

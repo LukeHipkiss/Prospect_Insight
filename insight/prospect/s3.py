@@ -17,12 +17,18 @@ s3 = boto3.resource(
 )
 
 
+def sanitise(name: str) -> str:
+    return "".join([c for c in name if c.islower()])
+
+
 def get_json_reports(report):
 
     reports = []
     for i in ["main", "comp1", "comp2"]:
 
-        content_object = s3.Object(report.prospect.name, f"{report.tag}/{i}.report.json")
+        name = sanitise(report.prospect.name)
+
+        content_object = s3.Object(name, f"{report.tag}/{i}.report.json")
         file_content = content_object.get()['Body'].read().decode('utf-8')
         json_content = json.loads(file_content)
 
