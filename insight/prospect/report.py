@@ -32,6 +32,7 @@ class LighthouseReport(dict):
 
         for perf_type, weight in self.PERFORMANCE_WEIGHTS.items():
             metric_score = self["audits"][perf_type]["score"]
+            metric_score = 0 if not metric_score else metric_score
             performance_score += metric_score * weight
 
             self["metrics"][perf_type.replace("-", "_")] = {
