@@ -18,7 +18,7 @@ def light_worker(
     tag,
     _type,
     prospect,
-    emulated_form_factor="desktop",
+    emulated_form_factor,
     chrome_flags="--headless --disable-gpu --no-sandbox",
     preset="perf",
     output="json,html",

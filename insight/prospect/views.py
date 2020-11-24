@@ -27,6 +27,7 @@ def report(request, report_tag):
         "comp1": rep.comp1_name,
         "comp2": rep.comp2_name,
         "reports": reports_data,
+        "device": rep.device_type,
         "tag": report_tag
     }
     return render(request, "prospect/report.html", context)
@@ -53,17 +54,18 @@ def generate_report(request):
 
     # Get parameters from the form
     prospect = request.POST.get("prospect", "")
-    prospect_url = request.POST.get("prospecturl", "")
     comp_one_name = request.POST.get("comp1name", "")
-    comp_one_url = request.POST.get("comp1url", "")
     comp_two_name = request.POST.get("comp2name", "")
+    prospect_url = request.POST.get("prospecturl", "")
+    comp_one_url = request.POST.get("comp1url", "")
     comp_two_url = request.POST.get("comp2url", "")
+    device = request.POST.get("devicetype", "")
 
     # Create a unique tag
     tag = uuid4()
 
     # Add reports to the queue to be picked up by workers
-    main, comp1, comp2 = schedule_report([prospect_url, comp_one_url, comp_two_url], tag, prospect)
+    main, comp1, comp2 = schedule_report([prospect_url, comp_one_url, comp_two_url], device, tag, prospect)
 
     # Store session information
     request.session["ongoing_report"] = True
@@ -73,7 +75,14 @@ def generate_report(request):
     request.session["tag"] = str(tag)
 
     # Update db
-    Report.create_by_tag(prospect, comp_one_name, comp_two_name, [prospect_url, comp_one_url, comp_two_url], tag)
+    Report.create_by_tag(
+        prospect,
+        comp_one_name,
+        comp_two_name,
+        [prospect_url, comp_one_url, comp_two_url],
+        device,
+        tag
+    )
 
     messages.info(request, "Your report is being prepared!")
     return HttpResponseRedirect(reverse("prospect:index"))
