@@ -14,42 +14,48 @@
                     <div class="col">
 
                         <div class="row">
-
-                            <div class="form-group mb-1">
-                                <select name="prospect" class="form-control" required>
-                                    <option value="">Choose Prospect</option>
+                            <div class="col-9 form-group mb-1 pr-0">
+                                <select name="prospect" class="form-control max-width" required>
+                                    <option disabled selected>Prospect</option>
                                     {% for prospect in prospects %}
                                     <option value="{{ prospect.name }}">{{ prospect.name }}</option>
                                     {% endfor %}
                                 </select>
-                                <button type="button" class="btn btn-tribe ml-2" data-toggle="modal" data-target="#add-new-prospect">+</button>
+                            </div>
+                            <div class="col pl-0">
+                                <button type="button" class="btn btn-tribe" data-toggle="modal" data-target="#add-new-prospect">+</button>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <input pattern="http(s?)(:\/\/)((www.)?)(([^.]+)\.)?([a-zA-z0-9\-_]+)(.co.uk|.com|.net|.gov|.org|.in)(\/[^\s]*)?" id="prospect-url" class="form-control mr-sm-2" type="url" name="prospecturl" placeholder="Prospect URL" required>
-                        </div>
+                        <input pattern="http(s?)(:\/\/)((www.)?)(([^.]+)\.)?([a-zA-z0-9\-_]+)(.co.uk|.com|.net|.gov|.org|.in)(\/[^\s]*)?" id="prospect-url" class="form-control max-width" type="url" name="prospecturl" placeholder="Prospect URL" required>
+                    </div>
+
+                    <div class="col">
+
+                        <input id="compone-name" class="form-control mr-sm-2 mb-1 max-width" type="text" name="comp1name" placeholder="Competitor Name" required>
+
+                        <input pattern="http(s?)(:\/\/)((www.)?)(([^.]+)\.)?([a-zA-z0-9\-_]+)(.co.uk|.com|.net|.gov|.org|.in)(\/[^\s]*)?" id="compone-url" class="form-control mr-sm-2 max-width" type="url" name="comp1url" placeholder="Competitor URL" required>
 
                     </div>
 
                     <div class="col">
 
-                        <input id="compone-name" class="form-control mr-sm-2 mb-1" type="text" name="comp1name" placeholder="Competitor Name" required>
+                        <input id="comptwo-name" class="form-control mr-sm-2 mb-1 max-width" type="text" name="comp2name" placeholder="Competitor Name" required>
 
-                        <input pattern="http(s?)(:\/\/)((www.)?)(([^.]+)\.)?([a-zA-z0-9\-_]+)(.co.uk|.com|.net|.gov|.org|.in)(\/[^\s]*)?" id="compone-url" class="form-control mr-sm-2" type="url" name="comp1url" placeholder="Competitor URL" required>
-
-                    </div>
-
-                    <div class="col">
-
-                        <input id="comptwo-name" class="form-control mr-sm-2 mb-1" type="text" name="comp2name" placeholder="Competitor Name" required>
-
-                        <input pattern="http(s?)(:\/\/)((www.)?)(([^.]+)\.)?([a-zA-z0-9\-_]+)(.co.uk|.com|.net|.gov|.org|.in)(\/[^\s]*)?" id="comptwo-url" class="form-control mr-sm-2" type="url" name="comp2url" placeholder="Competitor URL" required>
+                        <input pattern="http(s?)(:\/\/)((www.)?)(([^.]+)\.)?([a-zA-z0-9\-_]+)(.co.uk|.com|.net|.gov|.org|.in)(\/[^\s]*)?" id="comptwo-url" class="form-control mr-sm-2 max-width" type="url" name="comp2url" placeholder="Competitor URL" required>
 
                     </div>
 
                     <div class="col my-auto">
-                        <button class="btn btn-tribe max-width " type="submit">Analyse</button>
+                        <select name="devicetype" class="form-control max-width" required>
+                            <option disabled selected>Device Type</option>
+                            <option value="mobile">Mobile</option>
+                            <option value="desktop">Desktop</option>
+                        </select>
+                    </div>
+
+                    <div class="col my-auto">
+                        <button class="btn btn-tribe max-width" type="submit">Analyse</button>
                     </div>
                 </div>
             </form>
@@ -141,9 +147,9 @@
                 <tbody class="rounded">
                   <tr>
                     {% if request.session.ongoing_report %}
-                        <td id="status">Busy</td>
+                        <td id="busy-status">Busy</td>
                     {% else %}
-                        <td id="status">Available</td>
+                        <td id="available-status">Available</td>
                     {% endif %}
                         <td id="message"></td>
                   </tr>

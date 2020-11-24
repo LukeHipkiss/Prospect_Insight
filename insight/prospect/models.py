@@ -29,6 +29,7 @@ class Report(models.Model):
     comp1_url = models.URLField(max_length=200)
     comp2_name = models.CharField(max_length=200, default="Competitor")
     comp2_url = models.URLField(max_length=200)
+    device_type = models.CharField(max_length=10, default="Desktop")
     date = models.DateTimeField(auto_now_add=True)
     tag = models.CharField(max_length=200, unique=True)
 
@@ -36,7 +37,7 @@ class Report(models.Model):
         return f"Report for {self.prospect} generated on {self.date}"
 
     @classmethod
-    def create_by_tag(cls, prospect_name, comp1_name, comp2_name, urls, tag):
+    def create_by_tag(cls, prospect_name, comp1_name, comp2_name, urls, device, tag):
         """Creates a report """
         prospect = Prospect.objects.get(name=prospect_name)
         main_url, comp1_url, comp2_url = urls
@@ -47,5 +48,6 @@ class Report(models.Model):
             comp1_url=comp1_url,
             comp2_name=comp2_name,
             comp2_url=comp2_url,
+            device_type=device,
             tag=tag
         )
